@@ -1,0 +1,115 @@
+:root {
+  /*************************
+    || FONT FAMILY
+  **************************/
+  --font-primary: 'Ubuntu', sans-serif;
+
+  /*************************
+    || MAIN COLORS
+  *************************/
+  --primary-color: #fc5d46;
+  --button-color: #8220d6;
+
+  /*************************
+    || FONT COLOR
+**************************/
+  --fix-text-black: #000;
+  --fix-text-grey: #595757;
+  --fix-text-white: #fff;
+  --fix-text-error: #f84444;
+  --white-only: #fff;
+  --black-only: #000;
+
+  /*************************
+    || GRAYSCALE
+  *************************/
+  --gray-50: #fcfafa;
+  --gray-100: #f3efef;
+  --gray-300: #d5d0d0;
+  --gray-500: #bdbaba;
+  --gray-700: #595757;
+  --gray-800: #323030;
+  --gray-low: var(--gray-50);
+  --gray-medium: var(--gray-100);
+  --gray-high: var(--gray-300);
+
+  /*************************
+    || FONT SIZE
+  *************************/
+  --fs-8: 8px;
+  --fs-12: 12px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-26: 26px;
+  --fs-28: 28px;
+  --fs-30: 30px;
+  --fs-32: 32px;
+  --fs-34: 34px;
+  --fs-36: 36px;
+  --fs-38: 38px;
+
+  /*************************
+    || RADIUS
+  *************************/
+  --radius-xs: 6px;
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --radius-l: 36px;
+  --radius-xl: 100px;
+
+  /*************************
+    || SPACING
+  *************************/
+  --space-0: 0rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 3rem;
+  --space-6: 6rem;
+  --space-7: 12rem;
+
+  --max-w-width-wrapper: 512px;
+
+  /*************************
+    || COLORS
+  *************************/
+  --color-accent1: #ff5e00;
+  --color-accent2: #ff0095;
+
+
+
+  /*************************
+    || APPEARANCE
+  *************************/
+  --preview-bg-fill: var(--mat-sys-surface);
+
+  /*************************
+    || NAVIGATION
+  **************************/
+  --custom-navigation-tab-focused-fill: #272727;
+  --custom-radius-nav: 100px;
+  --custom-navigation-tab-enabled-fill: rgb(150 120 120 / 4%);
+  --custom-navigation-tab-focused-on: #fff;
+  --navbar-height: 60px;
+  --transition-duration: 0.3s;
+  --transition-duration-long: 0.6s;
+  --submenu-width: 480px;
+  --submenu-height: 230px;
+  --submenu-background: #f6f9fb;
+
+  /*************************
+    || PAGE
+  **************************/
+  --fix-background-fill: #fff;
+
+  /*************************
+    || BOX-SHADOWS
+  **************************/
+  --fix-box-shadow: rgb(150 120 120 / 6%);
+
+  --box-shadow-std: 0px 10px 15px var(--fix-box-box-shadow);
+}

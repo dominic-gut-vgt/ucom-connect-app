@@ -1,3 +1,9 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <app-header-toolbar></app-header-toolbar>
+
+  <ion-content [fullscreen]="false">
+    <ion-router-outlet></ion-router-outlet>
+  </ion-content>
+
+  <app-navbar></app-navbar>
 </ion-app>

@@ -9,6 +9,37 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+@use "./app/shared/styles/variables.scss";
+
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+button {
+  background-color: transparent;
+  border: unset;
+}
+
+
+.btn-std {
+  width: 100%;
+  border-radius: var(--radius-m);
+  text-transform: uppercase;
+  color: var(--color-accent1);
+}
+
+.page-container {
+  background-color: white;
+}
+
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 

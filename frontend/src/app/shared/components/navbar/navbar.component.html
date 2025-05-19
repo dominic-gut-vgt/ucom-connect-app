@@ -1,0 +1,13 @@
+<ion-footer no-border>
+  <div class="nav-container">
+    <ul class="nav-list">
+      @for(page of pages;track page.route){
+      <li [ngClass]="currentPageRoute()===page.route?'nav-item active':'nav-item'">
+        <button (click)="routeToPage(page)">
+          <h2><fa-icon [icon]="icons[$index]"></fa-icon></h2>
+        </button>
+      </li>
+      }
+    </ul>
+  </div>
+</ion-footer>
