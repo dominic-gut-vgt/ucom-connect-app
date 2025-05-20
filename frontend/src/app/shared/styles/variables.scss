@@ -109,7 +109,5 @@
   /*************************
     || BOX-SHADOWS
   **************************/
-  --fix-box-shadow: rgb(150 120 120 / 6%);
-
-  --box-shadow-std: 0px 10px 15px var(--fix-box-box-shadow);
+  --box-shadow-std: 0px 10px 15px rgb(0 0 0 / 20%);
 }

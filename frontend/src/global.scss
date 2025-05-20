@@ -10,6 +10,7 @@
  */
 
 @use "./app/shared/styles/variables.scss";
+@use "./app/shared/styles/animations.scss";
 
 html,
 body {
@@ -31,13 +32,26 @@ button {
 
 .btn-std {
   width: 100%;
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-l);
+  box-shadow: var(--box-shadow-std);
   text-transform: uppercase;
   color: var(--color-accent1);
+  font-size: var(--fs-18);
+  padding: var(--space-3) var(--space-4);
 }
 
 .page-container {
   background-color: white;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-3);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.width-wrapper {
+  width: 100%;
+  max-width: var(--max-w-width-wrapper);
 }
 
 /* Core CSS required for Ionic components to work properly */

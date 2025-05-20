@@ -24,7 +24,6 @@ export class HeaderToolbarComponent implements OnInit {
 
   ngOnInit() {
     this.navigationService.currentPageUpdated.subscribe((page) => {
-      console.log(page);
       this.currentPageName.set(page.name);
     });
   }

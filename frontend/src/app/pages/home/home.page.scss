@@ -1,0 +1,7 @@
+.scan-btn {
+  .scan-icon {
+    &.scanning {
+      animation: blinkAnimation 2s infinite;
+    }
+  }
+}

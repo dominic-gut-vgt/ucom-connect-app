@@ -21,7 +21,6 @@ export class NavigationService {
   private init(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        console.log('this is what your looking for ', event.url);
         Object.values(PAGES).forEach((page) => {
           if (event.url === `/${page.route}`) {
             this.currentPage = page;

@@ -1,3 +1,9 @@
 <div class="page-container">
-  <h1>home</h1>
+  <div class="width-wrapper">
+    <button class="btn-std scan-btn" (click)="scanForDevices()">
+      <fa-icon [ngClass]="isScanning()?'scan-icon scanning':'scan-icon'" [icon]="scanIcon()"></fa-icon>
+      {{isScanning()?'Searching for devices':'Search for devices'}}
+    </button>
+    
+  </div>
 </div>
