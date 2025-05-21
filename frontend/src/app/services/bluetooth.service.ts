@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BleClient, numberToUUID, ScanResult, numbersToDataView, ScanMode } from '@capacitor-community/bluetooth-le';
-import { BluetootAction } from '../shared/enums/bluetooth-action.enum';
+import { BleClient, numberToUUID, ScanResult, numbersToDataView, ScanMode, hexStringToDataView } from '@capacitor-community/bluetooth-le';
+import { BluetoothAction } from '../shared/enums/bluetooth-action.enum';
+import { BluetoothDataType } from '../shared/enums/bluetooth-data-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -19,42 +20,42 @@ export class BluetoothService {
   //flags
   private isScanning = false;
 
-  public async doActionOnServiceCharacteristic(deviceId: string, service: string, characteristic: string, action: BluetootAction): Promise<void> {
+  public async readCharacteristic(deviceId: string, service: string, characteristic: string): Promise<void> {
+    try {
+      console.log("++++++++++++",deviceId);
+      await BleClient.initialize();
+
+      console.log('+++++++connecting');
+      // connect to device, the onDisconnect callback is optional
+      await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
+
+      const characteristicDataView = await BleClient.read(deviceId, service, characteristic);
+      console.log('+++++++battery level', characteristicDataView.getUint8(0));
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public async writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Promise<void> {
     try {
       await BleClient.initialize();
 
       // connect to device, the onDisconnect callback is optional
       await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
-
-      if (action === BluetootAction.Read || action === BluetootAction.ReadWrite) {
-        const battery = await BleClient.read(deviceId, service, characteristic);
-        console.log('+++++++battery level', battery.getUint8(0));
+      let valueAsDataView: DataView;
+      switch (bluetoothDatatype) {
+        case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value));
       }
 
-      if (action === BluetootAction.Write || action === BluetootAction.ReadWrite) {
-        await BleClient.write(deviceId, service, characteristic, numbersToDataView([1, 0]));
-        console.log('+++++++written [1, 0] to control point');
-      }
+      await BleClient.write(deviceId, service, characteristic, valueAsDataView);
+      console.log('+++++++written [1, 0] to control point');
 
-      await BleClient.startNotifications(
-        deviceId,
-        service,
-        characteristic,
-        (value) => {
-          console.log('++++++++current heart rate', this.parseHeartRate(value));
-        },
-      );
-
-      // disconnect after 10 sec
-      setTimeout(async () => {
-        await BleClient.stopNotifications(deviceId, service, characteristic);
-        await BleClient.disconnect(deviceId);
-        console.log('disconnected from device', deviceId);
-      }, 5000);
     } catch (error) {
       console.error(error);
     }
   }
+
 
   private onDisconnect(deviceId: string): void {
     console.log(`device ${deviceId} disconnected`);
@@ -72,31 +73,39 @@ export class BluetoothService {
     return heartRate;
   }
 
+  private stringToHex(str: string): string {
+    return Array.from(str)
+      .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
+      .join('');
+  }
+
 
   async scan(): Promise<void> {
-    this.setIsScanning(true);
-    try {
-      await BleClient.initialize();
+    if (!this.isScanning) {
+      this.setIsScanning(true);
+      try {
+        await BleClient.initialize();
 
-      console.log("++++++++start scanning");
-      await BleClient.requestLEScan(
-        {
-          services: this.SERVICES,
-        },
-        result => {
-          this.scanResultUpdated.emit(result);
-          console.log('+++++++received new scan result', result);
-        },
-      );
+        console.log("++++++++start scanning");
+        await BleClient.requestLEScan(
+          {
+            services: this.SERVICES,
+          },
+          result => {
+            this.scanResultUpdated.emit(result);
+            console.log('+++++++received new scan result', result);
+          },
+        );
 
-      setTimeout(async () => {
-        await BleClient.stopLEScan();
-        console.log('+++++++++stopped scanning');
+        setTimeout(async () => {
+          await BleClient.stopLEScan();
+          console.log('+++++++++stopped scanning');
+          this.setIsScanning(false);
+        }, 10000);
+      } catch (error) {
+        console.error(error);
         this.setIsScanning(false);
-      }, 10000);
-    } catch (error) {
-      console.error(error);
-      this.setIsScanning(false);
+      }
     }
   }
 

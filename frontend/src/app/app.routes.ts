@@ -21,16 +21,6 @@ export const routes: Routes = [
   },
   {
     path: `${PAGES.device.route}`,
-    children: [
-      {
-        path: `:${ROUTE_PARAM_IDS.id}`,
-        loadComponent: () => import('./pages/device/device.page').then(m => m.DevicePage),
-      },
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: PAGES.home.route, // redirect to home if no :id
-      }
-    ]
+    loadComponent: () => import('./pages/device/device.page').then(m => m.DevicePage),
   },
 ];

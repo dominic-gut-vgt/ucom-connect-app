@@ -1,28 +1,28 @@
-.scan-results-list {
-  margin-top: var(--space-2);
-  margin-bottom: var(--space-5);
+ .no-devices-info {
+   color: var(--gray-500);
+ }
 
-  .result-item {
-    margin-bottom: var(--space-3);
-    box-shadow: var(--box-shadow-light);
-    border-radius: var(--radius-m);
-    padding: var(--space-3);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+ .scan-results-list {
+   margin-top: var(--space-2);
+   margin-bottom: var(--space-5);
 
-    .device-data {
-      width: 100%;
-    }
+   .result-item {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
 
-    .action-container {
-      height: 100%;
-      display: flex;
-      align-items: center;
+     .device-data {
+       width: 100%;
+     }
 
-      .connect-btn {
-        height: 100%;
-      }
-    }
-  }
-}
+     .action-container {
+       height: 100%;
+       display: flex;
+       align-items: center;
+
+       .connect-btn {
+         height: 100%;
+       }
+     }
+   }
+ }

@@ -1,10 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
-import { faGear, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BluetootAction } from 'src/app/shared/enums/bluetooth-action.enum';
-import { BleDevice, ScanResult } from '@capacitor-community/bluetooth-le';
+import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BluetoothDeviceListComponent } from './components/bluetooth-device-list/bluetooth-device-list.component';
 
 @Component({
@@ -23,7 +22,16 @@ export class HomePage implements OnInit {
   protected readonly scanIcon = faSearch;
 
   //data
-  protected scanResults = signal<ScanResult[]>([]);
+  protected scanResults = signal<ScanResult[]>([
+   /*
+    {
+      device: {
+        deviceId: 'device-id',
+        name: 'UCOM-CONNECT-73'
+      }
+    }
+      */
+  ]);
 
   //flags
   protected isScanning = signal(false)

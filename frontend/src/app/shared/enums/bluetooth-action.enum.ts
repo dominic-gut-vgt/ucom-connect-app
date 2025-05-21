@@ -1,4 +1,4 @@
-export enum BluetootAction{
+export enum BluetoothAction{
 Read,
 Write,
 ReadWrite

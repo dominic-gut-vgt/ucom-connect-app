@@ -1,10 +1,10 @@
-<h1>Scan Results</h1>
+<h1>UCOM-CONNECT Devices</h1>
 @if(scanResults().length===0){
-<p>Currently no devices found</p>
+<p class="no-devices-info">Currently no devices found</p>
 }
 <ul class="scan-results-list">
-  @for(result of scanResults();track result){
-  <li class="result-item">
+  @for(result of filteredScanResults();track result){
+  <li class="result-item card-std">
     <div class="device-data">
       <h3>Device name: {{result.device.name}}</h3>
       <p>Device Id: {{result.device.deviceId}}</p>
@@ -20,7 +20,7 @@
       </ul>
     </div>
     <div class="action-container">
-      <button class="connect-btn btn-icon" (click)="goToDevice(result.device.deviceId)">
+      <button class="connect-btn btn-icon" (click)="goToDevice(result)">
         <fa-icon [icon]="actionIcon"></fa-icon>
       </button>
     </div>

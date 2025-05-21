@@ -1,13 +1,40 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>device</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="page-container">
+  <div class="width-wrapper">
+    <h1>{{scanResult()?.device?.name}}</h1>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">device</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+    <form [formGroup]="characterisicValuesForm">
+      <ul [formArrayName]="FGK.Values" class="characteristics-list">
+        @for(characteristic of ucomConnectCharacteristics;track characteristic){
+        <li [formGroupName]="$index" class="characteristics-item card-std">
+          <div class="card-header">
+            <div class="infos">
+              <h3>{{characteristic.title}}</h3>
+              <p>Value: {{characteristic.value}}</p>
+            </div>
+            @if(characteristic.bluetoothAction===bluetoothAction.Read
+            ||characteristic.bluetoothAction===bluetoothAction.ReadWrite ){
+            <button class="btn-icon" (click)="readCharacteristic($index)" >
+              <fa-icon [icon]="readIcon"></fa-icon>
+            </button>
+            }
+          </div>
+
+          @if(characteristic.bluetoothAction===bluetoothAction.Write
+          ||characteristic.bluetoothAction===bluetoothAction.ReadWrite ){
+          <div class="input-container">
+            <div>
+              <label>{{characteristic.description}}</label>
+              <input [formControlName]="FGK.Value" placeholder="Value to send">
+            </div>
+            <button class="btn-std" (click)="writeCharacteristic($index)" >
+              Send
+            </button>
+          </div>
+          }
+        </li>
+        }
+      </ul>
+    </form>
+
+  </div>
+</div>

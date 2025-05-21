@@ -1,0 +1,24 @@
+.characteristics-list {
+  .characteristics-item {
+    .card-header {
+      display: flex;
+      align-items: center;
+
+      .infos {
+        width: 100%;
+      }
+    }
+
+    .input-container {
+      margin-top: var(--space-3);
+      display: flex;
+      align-items: flex-end;
+
+      .btn-std {
+        width: fit-content;
+        height: var(--input-height);
+        margin-left: var(--space-3);
+      }
+    }
+  }
+}

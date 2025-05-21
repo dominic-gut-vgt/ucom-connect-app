@@ -6,7 +6,7 @@ export const LEVEL_ONE_ROUTES = {
 }
 
 export const ROUTE_PARAM_IDS = {
-  id: 'id',
+  scanResult:'scanResult',
 }
 
 export const PAGES = {
