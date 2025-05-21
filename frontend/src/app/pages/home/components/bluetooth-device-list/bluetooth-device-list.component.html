@@ -1,0 +1,29 @@
+<h1>Scan Results</h1>
+@if(scanResults().length===0){
+<p>Currently no devices found</p>
+}
+<ul class="scan-results-list">
+  @for(result of scanResults();track result){
+  <li class="result-item">
+    <div class="device-data">
+      <h3>Device name: {{result.device.name}}</h3>
+      <p>Device Id: {{result.device.deviceId}}</p>
+      <p>Local Name: {{result.localName}}</p>
+      <ul>
+        @for(serviceDataPointKeyValue of (result.serviceData | keyvalue);track serviceDataPointKeyValue.key ){
+        <li>
+          <p>
+            {{serviceDataPointKeyValue.key}}: {{serviceDataPointKeyValue.value}}
+          </p>
+        </li>
+        }
+      </ul>
+    </div>
+    <div class="action-container">
+      <button class="connect-btn btn-icon" (click)="goToDevice(result.device.deviceId)">
+        <fa-icon [icon]="actionIcon"></fa-icon>
+      </button>
+    </div>
+  </li>
+  }
+</ul>

@@ -1,7 +1,15 @@
-.scan-btn {
-  .scan-icon {
-    &.scanning {
-      animation: blinkAnimation 2s infinite;
+.width-wrapper {
+  .scan-btn {
+    margin-bottom: var(--space-5);
+    
+    .scan-icon {
+      &.scanning {
+        animation: blinkAnimation 2s infinite;
+      }
     }
+  }
+
+  .read-write-btn{
+    margin-top: var(--space-5);
   }
 }

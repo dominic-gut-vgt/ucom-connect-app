@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PAGES } from './shared/consts/routes';
+import { PAGES, ROUTE_PARAM_IDS } from './shared/consts/routes';
 
 export const routes: Routes = [
   {
@@ -18,5 +18,19 @@ export const routes: Routes = [
   {
     path: PAGES.info.route,
     loadComponent: () => import('./pages/info/info.page').then(m => m.InfoPage)
+  },
+  {
+    path: `${PAGES.device.route}`,
+    children: [
+      {
+        path: `:${ROUTE_PARAM_IDS.id}`,
+        loadComponent: () => import('./pages/device/device.page').then(m => m.DevicePage),
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: PAGES.home.route, // redirect to home if no :id
+      }
+    ]
   },
 ];

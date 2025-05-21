@@ -6,7 +6,7 @@
   .nav-list {
     width: 100%;
     max-width: var(--max-w-width-wrapper);
-    padding: 0px var(--space-3);
+    padding: var(--space-3);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,14 +14,14 @@
     .nav-item {
       h2 {
         color: var(--gray-500);
-        transform: scale(1);
+        transform: scale(0.9);
         transition: 0.4s color, 0.4s transform;
       }
 
       &.active {
         h2 {
-          transform: scale(1.2);
-          color: var(--color-accent1);
+          transform: scale(1);
+          color: var(--color-primary);
         }
       }
 
