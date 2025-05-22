@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BluetoothDeviceListComponent } from './components/bluetooth-device-list/bluetooth-device-list.component';
+import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 
 @Component({
   selector: 'app-home',
@@ -55,6 +56,10 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+
+     const dataType=String;
+    this.bluetoothService.readCharacteristic<typeof dataType>('','','',BluetoothDataType.String).subscribe((value)=>{});
+ 
   }
 
   protected scanForDevices(): void {

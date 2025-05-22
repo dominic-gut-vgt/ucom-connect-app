@@ -10,6 +10,7 @@ import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
+import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 
 enum FormGroupKeys {
   Values = 'values',
@@ -40,6 +41,9 @@ export class DevicePage implements OnInit {
   //form
   protected characterisicValuesForm!: FormGroup;
 
+  //flags
+  protected updatedValueInd = signal<number>(-1);
+
   constructor() {
     this.characterisicValuesForm = this.fb.group({
       [this.FGK.Values]: this.fb.array([]) // initialize empty form array
@@ -62,15 +66,32 @@ export class DevicePage implements OnInit {
   //characteristics------------------------------------------------------------
   protected readCharacteristic(ind: number): void {
     const characteristic = this.ucomConnectCharacteristics[ind];
-    this.bluetoothService.readCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid);
+    this.bluetoothService.readCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, characteristic.dataType).subscribe({
+      next: (value) => {
+        this.ucomConnectCharacteristics[ind].value = value;
+        console.log("+++++++", value);
+        this.updatedValueInd.set(ind);
+        setTimeout(() => {
+          this.updatedValueInd.set(-1);
+        }, 3000);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   protected writeCharacteristic(ind: number): void {
     const characteristic = this.ucomConnectCharacteristics[ind];
     const value = this.characteristicValues.at(ind).value;
-    console.log(value);
-    this.bluetoothService.writeCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, value, characteristic.dataType);
-
+    this.bluetoothService.writeCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, value, characteristic.dataType).subscribe({
+      next: (worked) => {
+        console.log(worked);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   //form-group-----------------------------------------------------------------

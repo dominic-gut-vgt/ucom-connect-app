@@ -1,7 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BleClient, numberToUUID, ScanResult, numbersToDataView, ScanMode, hexStringToDataView } from '@capacitor-community/bluetooth-le';
+import { BleClient, numberToUUID, ScanResult, hexStringToDataView } from '@capacitor-community/bluetooth-le';
 import { BluetoothAction } from '../shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from '../shared/enums/bluetooth-data-type.enum';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,41 +21,77 @@ export class BluetoothService {
   //flags
   private isScanning = false;
 
-  public async readCharacteristic(deviceId: string, service: string, characteristic: string): Promise<void> {
-    try {
-      console.log("++++++++++++",deviceId);
-      await BleClient.initialize();
 
-      console.log('+++++++connecting');
-      // connect to device, the onDisconnect callback is optional
-      await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
+  public readCharacteristic<T>(
+    deviceId: string,
+    service: string,
+    characteristic: string,
+    dataType: BluetoothDataType
+  ): Observable<T> {
+    return new Observable<T>(observer => {
+      (async () => {
+        try {
+          console.log("++++++++++++", deviceId);
+          await BleClient.initialize();
 
-      const characteristicDataView = await BleClient.read(deviceId, service, characteristic);
-      console.log('+++++++battery level', characteristicDataView.getUint8(0));
+          console.log('+++++++connecting');
+          await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
+          const dataView = await BleClient.read(deviceId, service, characteristic);
 
-    } catch (error) {
-      console.error(error);
+          let value: T = this.parseValue<T>(dataView, dataType);
+
+          observer.next(value);
+          observer.complete();
+        } catch (error) {
+          console.error(error);
+          observer.error(error);
+        }
+      })();
+    });
+  }
+
+  parseValue<T>(dataView: DataView, dataType: BluetoothDataType): T {
+    switch (dataType) {
+      case BluetoothDataType.String:
+        const byteArray = new Uint8Array(dataView.buffer);
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(byteArray) as T;
+      case BluetoothDataType.Number:
+        return dataView.getUint32(0, true) as T; // true = little-endian
+      case BluetoothDataType.Boolean:
+        return (dataView.getUint8(0) !== 0) as T;
+      default:
+        throw new Error('Unsupported Bluetooth data type');
     }
   }
 
-  public async writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Promise<void> {
-    try {
-      await BleClient.initialize();
+  public writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      (async () => {
+        try {
+          await BleClient.initialize();
 
-      // connect to device, the onDisconnect callback is optional
-      await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
-      let valueAsDataView: DataView;
-      switch (bluetoothDatatype) {
-        case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value));
-      }
+          // connect to device, the onDisconnect callback is optional
+          await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
+          let valueAsDataView: DataView;
+          switch (bluetoothDatatype) {
+            case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value)); break;
+            default: valueAsDataView = hexStringToDataView(this.stringToHex(value))
+          }
 
-      await BleClient.write(deviceId, service, characteristic, valueAsDataView);
-      console.log('+++++++written [1, 0] to control point');
+          await BleClient.write(deviceId, service, characteristic, valueAsDataView);
+          observer.next(true);
+          observer.complete();
 
-    } catch (error) {
-      console.error(error);
-    }
+        } catch (error) {
+          console.error(error);
+          observer.error(error);
+        }
+      });
+    })
   }
+
+
 
 
   private onDisconnect(deviceId: string): void {

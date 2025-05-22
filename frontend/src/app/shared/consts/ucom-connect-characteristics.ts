@@ -9,7 +9,6 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     uuid: '3216f2a6-8522-4855-bf75-0ef063789ea0',
     serviceUUID:'0be217e9-d3a5-428f-a009-31fa6831b9c5',
     dataType: BluetoothDataType.String,
-    bufferLength: 32, //in bytes
     bluetoothAction: BluetoothAction.ReadWrite,
     value: ''
   }

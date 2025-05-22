@@ -9,11 +9,11 @@
           <div class="card-header">
             <div class="infos">
               <h3>{{characteristic.title}}</h3>
-              <p>Value: {{characteristic.value}}</p>
+              <p [ngClass]="updatedValueInd()===$index?'value updated':'value'">Value: {{characteristic.value}}</p>
             </div>
             @if(characteristic.bluetoothAction===bluetoothAction.Read
             ||characteristic.bluetoothAction===bluetoothAction.ReadWrite ){
-            <button class="btn-icon" (click)="readCharacteristic($index)" >
+            <button class="btn-icon" (click)="readCharacteristic($index)">
               <fa-icon [icon]="readIcon"></fa-icon>
             </button>
             }
@@ -26,7 +26,7 @@
               <label>{{characteristic.description}}</label>
               <input [formControlName]="FGK.Value" placeholder="Value to send">
             </div>
-            <button class="btn-std" (click)="writeCharacteristic($index)" >
+            <button class="btn-std" (click)="writeCharacteristic($index)">
               Send
             </button>
           </div>
