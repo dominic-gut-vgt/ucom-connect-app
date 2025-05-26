@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'energy.vgt.ucomconnectapp',
-  appName: 'frontend',
+  appName: 'VGT UCOM Connect',
   webDir: 'www'
 };
 
