@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BleClient, numberToUUID, ScanResult, hexStringToDataView, } from '@capacitor-community/bluetooth-le';
 import { BluetoothDataType } from '../shared/enums/bluetooth-data-type.enum';
 import { Observable } from 'rxjs';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,7 @@ export class BluetoothService {
 
     //initial check
     BleClient.isEnabled().then((enabled) => {
-      this.bluetoothEnabledUpdated.emit(enabled);
-      this.bluetoothEnabledUpdated.emit(enabled);
+      this.bluetoothEnabledUpdated.emit(enabled && Capacitor.isNativePlatform());
     }).catch((error) => {
       this.bluetoothEnabledUpdated.emit(false);
     });

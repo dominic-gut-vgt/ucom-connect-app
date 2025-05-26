@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BluetoothDeviceListComponent } from './components/bluetooth-device-list/bluetooth-device-list.component';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-home',
@@ -21,22 +22,25 @@ export class HomePage {
 
   //consts
   protected readonly scanIcon = faSearch;
-  protected readonly infoIcon=faInfoCircle
+  protected readonly infoIcon = faInfoCircle
+
   //data
   protected scanResults = signal<ScanResult[]>([
-    
-     {
-       device: {
-         deviceId: 'device-id',
-         name: 'UCOM-CONNECT-73'
-       }
-     }
-       
+    /*
+    {
+      device: {
+        deviceId: 'device-id',
+        name: 'UCOM-CONNECT-73'
+      }
+    }
+    */
   ]);
 
   //flags
+  private scannedOnce = false;
   protected isScanning = signal(false)
   protected bluetoothEnabled = signal(false);
+
 
   constructor() {
     this.bluetoothService.isScanningUpdated.subscribe((isScanning) => {
@@ -54,11 +58,17 @@ export class HomePage {
       }
     });
     this.bluetoothService.bluetoothEnabledUpdated.subscribe((enabled) => {
-        this.bluetoothEnabled.set(enabled);
+      this.bluetoothEnabled.set(enabled);
+      if (enabled) {
+        if (!this.scannedOnce) {
+          this.scanForDevices();
+        }
+      }
     });
   }
 
   protected scanForDevices(): void {
+    this.scannedOnce = true;
     this.isScanning.set(true);
     this.bluetoothService.scan();
   }
