@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PAGES } from '../../consts/routes';
-import { faGear, faHome, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faGear, faHome, faInfoCircle, faPaste } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -23,12 +23,12 @@ export class NavbarComponent implements OnInit {
   //consts
   protected readonly pages = [
     PAGES.home,
-    PAGES.settings,
+    PAGES.createdTemplate,
     PAGES.info
   ];
   protected readonly icons = [
     faHome,
-    faGear,
+    faPaste,
     faInfoCircle,
   ];
 

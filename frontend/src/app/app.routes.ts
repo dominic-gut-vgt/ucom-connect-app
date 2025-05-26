@@ -23,4 +23,20 @@ export const routes: Routes = [
     path: `${PAGES.device.route}`,
     loadComponent: () => import('./pages/device/device.page').then(m => m.DevicePage),
   },
+  {
+    path: PAGES.templates.route,
+    loadComponent: () => import('./pages/templates/templates.page').then(m => m.TemplatesPage),
+    children: [
+      {
+        path: PAGES.createTemplate.relativeRoute,
+        loadComponent: () => import('./pages/templates/create-template/create-template.page').then(m => m.CreateTemplatePage)
+      },
+      {
+        path: PAGES.createdTemplate.relativeRoute,
+        loadComponent: () => import('./pages/templates/created-templates/created-templates.page').then(m => m.CreatedTemplatesPage)
+      },
+    ]
+  },
+
+
 ];

@@ -13,12 +13,14 @@ export class NavigationService {
 
   public currentPageUpdated = new EventEmitter<Page>();
 
-  private currentPage: Page = { route: '', name: '' }
+  private currentPage: Page = PAGES.home
   constructor() {
     this.init();
+
+
   }
 
-  private init(): void {
+  private async init(): Promise<void> {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         Object.values(PAGES).forEach((page) => {
