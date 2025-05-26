@@ -7,7 +7,28 @@
       .infos {
         width: 100%;
 
-        
+        .value-container {
+          display: flex;
+          align-items: center;
+
+          .value {
+            background-color: transparent;
+            transition: 0.4s background-color;
+            padding: var(--space-1) var(--space-2);
+            margin-left: var(--space-1);
+            border-radius: var(--radius-s);
+
+            &.updated {
+              background-color: rgb(from var(--color-primary) r g b / 0.2)
+            }
+          }
+        }
+      }
+
+      .read-btn {
+        &.is-reading {
+          animation: blinkAnimation 2s infinite;
+        }
       }
     }
 
@@ -16,10 +37,14 @@
       display: flex;
       align-items: flex-end;
 
-      .btn-std {
+      .write-btn {
         width: fit-content;
         height: var(--input-height);
         margin-left: var(--space-3);
+
+        &.is-writing {
+          animation: blinkAnimation 2s infinite;
+        }
       }
     }
   }

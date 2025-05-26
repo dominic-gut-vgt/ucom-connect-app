@@ -42,6 +42,8 @@ export class DevicePage implements OnInit {
   protected characterisicValuesForm!: FormGroup;
 
   //flags
+  protected isReading = signal<boolean>(false);
+  protected isWriting = signal<boolean>(false);
   protected updatedValueInd = signal<number>(-1);
 
   constructor() {
@@ -60,38 +62,57 @@ export class DevicePage implements OnInit {
 
   ngOnInit() {
     const nav = this.router.getCurrentNavigation();
-    this.scanResult.set(nav?.extras?.state?.[ROUTE_PARAM_IDS.scanResult])
+    this.scanResult.set(nav?.extras?.state?.[ROUTE_PARAM_IDS.scanResult]);
+
+    if (this.scanResult()) {
+      //read all characteristics on init
+      for (let i = 0; i < this.ucomConnectCharacteristics.length; i++) {
+        this.readCharacteristic(i);
+      }
+    }
   }
+
+
 
   //characteristics------------------------------------------------------------
   protected readCharacteristic(ind: number): void {
-    const characteristic = this.ucomConnectCharacteristics[ind];
-    this.bluetoothService.readCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, characteristic.dataType).subscribe({
-      next: (value) => {
-        this.ucomConnectCharacteristics[ind].value = value;
-        console.log("+++++++", value);
-        this.updatedValueInd.set(ind);
-        setTimeout(() => {
-          this.updatedValueInd.set(-1);
-        }, 3000);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if (!this.isReading()) {
+      const characteristic = this.ucomConnectCharacteristics[ind];
+      this.isReading.set(true);
+      this.bluetoothService.readCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, characteristic.dataType).subscribe({
+        next: (value) => {
+          this.ucomConnectCharacteristics[ind].value = value;
+          this.updatedValueInd.set(ind);
+          setTimeout(() => {
+            this.updatedValueInd.set(-1);
+          }, 3000);
+          this.isReading.set(false);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isReading.set(false);
+        }
+      });
+    }
   }
 
   protected writeCharacteristic(ind: number): void {
-    const characteristic = this.ucomConnectCharacteristics[ind];
-    const value = this.characteristicValues.at(ind).value;
-    this.bluetoothService.writeCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, value, characteristic.dataType).subscribe({
-      next: (worked) => {
-        console.log(worked);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if (!this.isWriting()) {
+      const characteristic = this.ucomConnectCharacteristics[ind];
+      const value = this.characteristicValues.at(ind).value.value;
+      this.isWriting.set(true);
+      this.bluetoothService.writeCharacteristic(this.scanResult()?.device.deviceId ?? '', characteristic.serviceUUID, characteristic.uuid, value, characteristic.dataType).subscribe({
+        next: (worked) => {
+          console.log(worked);
+          this.readCharacteristic(ind);
+          this.isWriting.set(false);
+        },
+        error: (error) => {
+          console.log(error);
+          this.isWriting.set(false);
+        }
+      });
+    }
   }
 
   //form-group-----------------------------------------------------------------

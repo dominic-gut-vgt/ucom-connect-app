@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BluetoothDeviceListComponent } from './components/bluetooth-device-list/bluetooth-device-list.component';
@@ -14,29 +14,29 @@ import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum
   standalone: true,
   imports: [CommonModule, FontAwesomeModule, BluetoothDeviceListComponent]
 })
-export class HomePage implements OnInit {
+export class HomePage {
 
   //injections
   private readonly bluetoothService = inject(BluetoothService);
 
   //consts
   protected readonly scanIcon = faSearch;
-
+  protected readonly infoIcon=faInfoCircle
   //data
   protected scanResults = signal<ScanResult[]>([
-   /*
-    {
-      device: {
-        deviceId: 'device-id',
-        name: 'UCOM-CONNECT-73'
-      }
-    }
-      */
+    /*
+     {
+       device: {
+         deviceId: 'device-id',
+         name: 'UCOM-CONNECT-73'
+       }
+     }
+       */
   ]);
 
   //flags
   protected isScanning = signal(false)
-
+  protected bluetoothEnabled = signal(false);
 
   constructor() {
     this.bluetoothService.isScanningUpdated.subscribe((isScanning) => {
@@ -53,13 +53,9 @@ export class HomePage implements OnInit {
         });
       }
     });
-  }
-
-  ngOnInit() {
-
-     const dataType=String;
-    this.bluetoothService.readCharacteristic<typeof dataType>('','','',BluetoothDataType.String).subscribe((value)=>{});
- 
+    this.bluetoothService.bluetoothEnabledUpdated.subscribe((enabled) => {
+        this.bluetoothEnabled.set(enabled);
+    });
   }
 
   protected scanForDevices(): void {

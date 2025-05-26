@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BleClient, numberToUUID, ScanResult, hexStringToDataView } from '@capacitor-community/bluetooth-le';
-import { BluetoothAction } from '../shared/enums/bluetooth-action.enum';
+import { BleClient, numberToUUID, ScanResult, hexStringToDataView, } from '@capacitor-community/bluetooth-le';
 import { BluetoothDataType } from '../shared/enums/bluetooth-data-type.enum';
 import { Observable } from 'rxjs';
 
@@ -17,9 +16,31 @@ export class BluetoothService {
 
   public readonly scanResultUpdated = new EventEmitter<ScanResult>();
   public readonly isScanningUpdated = new EventEmitter<boolean>();
+  public readonly bluetoothEnabledUpdated = new EventEmitter<boolean>();
 
   //flags
   private isScanning = false;
+
+  constructor() {
+    this.init();
+  }
+
+  private async init(): Promise<void> {
+    await BleClient.initialize();
+
+    //initial check
+    BleClient.isEnabled().then((enabled) => {
+      this.bluetoothEnabledUpdated.emit(enabled);
+      this.bluetoothEnabledUpdated.emit(enabled);
+    }).catch((error) => {
+      this.bluetoothEnabledUpdated.emit(false);
+    });
+
+    //subscribe to enabled state changes
+    BleClient.startEnabledNotifications((enabled) => {
+      this.bluetoothEnabledUpdated.emit(enabled);
+    });
+  }
 
 
   public readCharacteristic<T>(
@@ -31,11 +52,9 @@ export class BluetoothService {
     return new Observable<T>(observer => {
       (async () => {
         try {
-          console.log("++++++++++++", deviceId);
           await BleClient.initialize();
 
-          console.log('+++++++connecting');
-          await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
+          await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
           const dataView = await BleClient.read(deviceId, service, characteristic);
 
           let value: T = this.parseValue<T>(dataView, dataType);
@@ -66,19 +85,19 @@ export class BluetoothService {
   }
 
   public writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Observable<boolean> {
+    console.log('++++++++++++++1', deviceId, service, characteristic, value, bluetoothDatatype);
+
     return new Observable<boolean>(observer => {
       (async () => {
         try {
           await BleClient.initialize();
+          await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
 
-          // connect to device, the onDisconnect callback is optional
-          await BleClient.connect(deviceId, (deviceId) => this.onDisconnect(deviceId));
           let valueAsDataView: DataView;
           switch (bluetoothDatatype) {
             case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value)); break;
             default: valueAsDataView = hexStringToDataView(this.stringToHex(value))
           }
-
           await BleClient.write(deviceId, service, characteristic, valueAsDataView);
           observer.next(true);
           observer.complete();
@@ -87,15 +106,8 @@ export class BluetoothService {
           console.error(error);
           observer.error(error);
         }
-      });
+      })();
     })
-  }
-
-
-
-
-  private onDisconnect(deviceId: string): void {
-    console.log(`device ${deviceId} disconnected`);
   }
 
   private parseHeartRate(value: DataView): number {
