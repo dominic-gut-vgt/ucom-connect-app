@@ -6,7 +6,7 @@
       <fa-icon [ngClass]="isScanning()?'scan-icon scanning':'scan-icon'" [icon]="scanIcon"></fa-icon>
       {{isScanning()?'Searching for devices':'Search for devices'}}
     </button>
-    
+
     <app-bluetooth-device-list [scanResults]="scanResults()"></app-bluetooth-device-list>
     }@else {
     <div class="bluetooth-disabled-info">

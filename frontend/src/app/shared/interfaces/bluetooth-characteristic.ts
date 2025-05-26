@@ -7,7 +7,6 @@ export interface BluetoothCharacteristic {
   uuid: string,
   serviceUUID: string,
   dataType: BluetoothDataType,
-  //bufferLength: number, //in bytes
   bluetoothAction: BluetoothAction,
   value: any
 }

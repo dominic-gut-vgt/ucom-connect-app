@@ -24,14 +24,14 @@ export class HomePage {
   protected readonly infoIcon=faInfoCircle
   //data
   protected scanResults = signal<ScanResult[]>([
-    /*
+    
      {
        device: {
          deviceId: 'device-id',
          name: 'UCOM-CONNECT-73'
        }
      }
-       */
+       
   ]);
 
   //flags

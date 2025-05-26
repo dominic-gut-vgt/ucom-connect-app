@@ -1,4 +1,6 @@
 .characteristics-list {
+  padding-bottom: var(--space-5);
+
   .characteristics-item {
     .card-header {
       display: flex;
@@ -36,6 +38,10 @@
       margin-top: var(--space-3);
       display: flex;
       align-items: flex-end;
+
+      .input-wrapper {
+        width: 100%;
+      }
 
       .write-btn {
         width: fit-content;

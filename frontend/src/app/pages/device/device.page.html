@@ -9,10 +9,14 @@
           <div class="card-header">
             <div class="infos">
               <h3>{{characteristic.title}}</h3>
+              @if(characteristic.bluetoothAction===bluetoothAction.Read
+              ||characteristic.bluetoothAction===bluetoothAction.ReadWrite){
               <div class="value-container">
                 <p>Value:</p>
-                <p [ngClass]="updatedValueInd()===$index?'value updated':'value'">{{characteristic.value.length>0?characteristic.value:'No value'}}</p>
+                <p [ngClass]="updatedValueInd()===$index?'value updated':'value'">
+                  {{characteristic.value.length>0?characteristic.value:'No value'}}</p>
               </div>
+              }
             </div>
             @if(characteristic.bluetoothAction===bluetoothAction.Read
             ||characteristic.bluetoothAction===bluetoothAction.ReadWrite ){
@@ -26,7 +30,7 @@
           @if(characteristic.bluetoothAction===bluetoothAction.Write
           ||characteristic.bluetoothAction===bluetoothAction.ReadWrite ){
           <div class="input-container">
-            <div>
+            <div class="input-wrapper">
               <label>{{characteristic.description}}</label>
               <input [formControlName]="FGK.Value" placeholder="Value to send">
             </div>

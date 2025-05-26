@@ -9,6 +9,7 @@ import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 import { Template } from 'src/app/shared/interfaces/templates/template.interface';
 import { UcomConnectSetupTemplateData } from 'src/app/shared/interfaces/templates/ucom-connect-template-data.interface';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TemplateService } from 'src/app/services/template.service';
 
 @Component({
   selector: 'app-created-templates',
@@ -19,30 +20,25 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 })
 export class CreatedTemplatesPage implements OnInit {
   //injections
-  private localStorageService = inject(LocalStorageService);
-  private readonly router = inject(Router);
+  private router = inject(Router);
+  private templateService = inject(TemplateService);
 
   //consts
   protected readonly editIcon = faPen;
-  protected readonly infoIcon = faInfoCircle
+  protected readonly infoIcon = faInfoCircle;
 
   //data
   protected templates = signal<Template<UcomConnectSetupTemplateData>[]>([]);
 
-
   ngOnInit() {
-    this.loadTemplates();
+    this.templateService.loadTemplates().subscribe((templates) => {
+      this.templates.set(templates);
+    });
   }
 
-
-  loadTemplates() {
-    this.localStorageService.getItem<any[]>(LocalStorageKey.Templates).then(templates => {
-      if (templates) {
-        this.templates.set(templates);
-      }
-    }).catch(error => {
-      console.error('Error loading templates:', error);
-    });
+  editTemplate(template: Template<UcomConnectSetupTemplateData>) {
+    this.templateService.setCurrentSelectedTemplate(template);
+    this.router.navigate([PAGES.createTemplate.route]);
   }
 
   createTemplate() {
