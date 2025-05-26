@@ -7,9 +7,13 @@ import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 
 enum FormGroupKeys {
-  Value = 'value',
+  StringValue = 'stringValue',
+  BooleanValue = 'booleanValue',
+  NumberValue = 'numberValue',
 }
 
 
@@ -17,9 +21,9 @@ enum FormGroupKeys {
   selector: 'app-device-characteristic',
   templateUrl: './device-characteristic.component.html',
   styleUrls: ['./device-characteristic.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule]
 })
-export class DeviceCharacteristicComponent implements OnInit {
+export class DeviceCharacteristicComponent {
   //injections
   private bluetoothService = inject(BluetoothService);
   private fb = inject(FormBuilder);
@@ -43,6 +47,7 @@ export class DeviceCharacteristicComponent implements OnInit {
   //form
   protected characteristicValueForm!: FormGroup;
 
+
   constructor() {
     effect(() => {
       if (!this.initiallyLoaded) {
@@ -54,14 +59,11 @@ export class DeviceCharacteristicComponent implements OnInit {
     });
 
     this.characteristicValueForm = this.fb.group({
-      [this.FGK.Value]: new FormControl(''),
+      [this.FGK.StringValue]: new FormControl(''),
+      [this.FGK.BooleanValue]: new FormControl(true),
+      [this.FGK.NumberValue]: new FormControl(0),
     });
   }
-
-  ngOnInit() {
-
-  }
-
 
 
   //characteristics------------------------------------------------------------
@@ -91,7 +93,9 @@ export class DeviceCharacteristicComponent implements OnInit {
 
   protected writeCharacteristic(): void {
     if (!this.isWriting()) {
-      const value = this.characteristicValueForm.get(this.FGK.Value)?.value;
+
+      const value = this.getWriteValue();
+      console.log('Writing value:', value);
       this.isWriting.set(true);
       this.bluetoothService.writeCharacteristic(this.deviceId() ?? '', this.characteristic().serviceUUID, this.characteristic().uuid, value, this.characteristic().dataType).subscribe({
         next: (worked) => {
@@ -106,4 +110,14 @@ export class DeviceCharacteristicComponent implements OnInit {
       });
     }
   }
+
+  private getWriteValue(): any {
+    switch (this.characteristic().dataType) {
+      case BluetoothDataType.Boolean: return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
+      case BluetoothDataType.String: return this.characteristicValueForm.get(this.FGK.StringValue)?.value;
+      case BluetoothDataType.Number: return this.characteristicValueForm.get(this.FGK.NumberValue)?.value;
+      default: ''
+    }
+  }
+
 }

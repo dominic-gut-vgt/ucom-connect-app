@@ -24,18 +24,21 @@
   ||characteristic().bluetoothAction===bluetoothAction.ReadWrite ){
   <div class="input-container">
     <div class="input-wrapper">
-      @switch (characteristic().dataType) {
-      @case(bluetoothDataType.Boolean){
-        
-      }
-      @default {
+      <p class="label">{{characteristic().description}}</p>
       <form [formGroup]="characteristicValueForm">
-        <label>{{characteristic().description}}</label>
-        <input [formControlName]="FGK.Value" placeholder="Value to send">
-      </form>
-      }
-      }
 
+        @switch (characteristic().dataType) {
+        @case(bluetoothDataType.Boolean){
+        <mat-slide-toggle [formControlName]="FGK.BooleanValue"></mat-slide-toggle>
+        }
+        @case (bluetoothDataType.Number){
+        <input type="number" [formControlName]="FGK.NumberValue" placeholder="Value to send">
+        }
+        @default {
+        <input type="text" [formControlName]="FGK.StringValue" placeholder="Value to send">
+        }
+        }
+      </form>
 
     </div>
     <button [ngClass]="isWriting()?'write-btn btn-std is-writing':'write-btn btn-std'" (click)="writeCharacteristic()">

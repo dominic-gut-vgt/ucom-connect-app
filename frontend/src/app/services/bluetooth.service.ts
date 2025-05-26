@@ -52,15 +52,19 @@ export class BluetoothService {
     return new Observable<T>(observer => {
       (async () => {
         try {
-          await BleClient.initialize();
+          if (deviceId.length>0 && service.length>0 &&characteristic.length>0) {
+            await BleClient.initialize();
 
-          await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
-          const dataView = await BleClient.read(deviceId, service, characteristic);
+            await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
+            const dataView = await BleClient.read(deviceId, service, characteristic);
 
-          let value: T = this.parseValue<T>(dataView, dataType);
+            let value: T = this.parseValue<T>(dataView, dataType);
 
-          observer.next(value);
-          observer.complete();
+            observer.next(value);
+            observer.complete();
+          }else{
+            observer.error(new Error('Invalid deviceId, service or characteristic'));
+          }
         } catch (error) {
           console.error(error);
           observer.error(error);
