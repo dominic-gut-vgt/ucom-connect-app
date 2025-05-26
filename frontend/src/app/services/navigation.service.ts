@@ -31,4 +31,8 @@ export class NavigationService {
     });
   }
 
+  public getCurrentPageName(): string {
+    return this.currentPage.name;
+  }
+
 }
