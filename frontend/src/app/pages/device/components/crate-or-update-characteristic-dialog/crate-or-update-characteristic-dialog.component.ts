@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
@@ -15,9 +15,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 enum FormGroupKeys {
-  StringValue = 'stringValue',
-  BooleanValue = 'booleanValue',
-  NumberValue = 'numberValue',
+  Title = 'title',
+  Description = 'description',
+  UUID = 'uuid',
+  ServiceUUID = 'serviceUUID',
+  DeviceId = 'deviceId',
+  DataType = 'dataType',
+  BluetoothAction = 'bluetoothAction',
+  Value = 'value',
+  ReadAfterEveryWrite = 'readAfterEveryWrite',
+  Infos = 'infos',
+  ValueKey = 'valueKey',
 }
 
 
@@ -25,8 +33,10 @@ enum FormGroupKeys {
   selector: 'app-crate-or-update-characteristic-dialog',
   templateUrl: './crate-or-update-characteristic-dialog.component.html',
   styleUrls: ['./crate-or-update-characteristic-dialog.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class CrateOrUpdateCharacteristicDialogComponent implements OnInit {
   //injections
   readonly dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
@@ -38,7 +48,7 @@ export class CrateOrUpdateCharacteristicDialogComponent implements OnInit {
   protected readonly bluetoothActions = Object.values(BluetoothAction);
   protected readonly bluetoothDataTypes = Object.values(BluetoothDataType);
   protected readonly deleteIcon = faTrash;
-  
+
   //form
   protected characteristicForm!: FormGroup;
 
@@ -46,49 +56,63 @@ export class CrateOrUpdateCharacteristicDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  constructor() { }
-
   ngOnInit() {
-
     this.createCharacteristicForm(this.characteristic);
   }
 
   createCharacteristicInfoForm(info?: BluetoothCharacteristicInfo): FormGroup {
     return this.fb.group({
-      title: [info?.title || '', Validators.required],
-      description: [info?.description || '', Validators.required],
-      valueKey: [info?.valueKey || ''],
+      [this.FGK.Title]: [info?.title || '', Validators.required],
+      [this.FGK.Description]: [info?.description || '', Validators.required],
+      [this.FGK.ValueKey]: [info?.valueKey || ''],
     });
   }
 
   createCharacteristicForm(characteristic: BluetoothCharacteristic): void {
     this.characteristicForm = this.fb.group({
-      title: [characteristic?.title || '', Validators.required],
-      description: [characteristic?.description || '', Validators.required],
-      uuid: [characteristic?.uuid || '', Validators.required],
-      serviceUUID: [characteristic?.serviceUUID || '', Validators.required],
-      deviceId: [characteristic?.deviceId || ''],
-      dataType: [characteristic?.dataType || '', Validators.required],
-      bluetoothAction: [characteristic?.bluetoothAction || '', Validators.required],
-      value: [characteristic?.value || ''],
-      readAfterEveryWrite: [characteristic?.readAfterEveryWrite ?? false],
-      infos: this.fb.array(
+      [this.FGK.Title]: [characteristic?.title || '', Validators.required],
+      [this.FGK.Description]: [characteristic?.description || '', Validators.required],
+      [this.FGK.UUID]: [characteristic?.uuid || '', Validators.required],
+      [this.FGK.ServiceUUID]: [characteristic?.serviceUUID || '', Validators.required],
+      [this.FGK.DeviceId]: [characteristic?.deviceId || ''],
+      [this.FGK.DataType]: [characteristic?.dataType || '', Validators.required],
+      [this.FGK.BluetoothAction]: [characteristic?.bluetoothAction || '', Validators.required],
+      [this.FGK.Value]: [characteristic?.value || ''],
+      [this.FGK.ReadAfterEveryWrite]: [characteristic?.readAfterEveryWrite ?? false],
+      [this.FGK.Infos]: this.fb.array(
         (characteristic?.infos || []).map(info => this.createCharacteristicInfoForm(info))
       ),
     });
   }
 
-  // Getter for infos as FormArray
-  get infos(): FormArray {
-    return this.characteristicForm.get('infos') as FormArray;
+  protected saveCharacteristic() {
+    if (this.characteristicForm.valid) {
+      const characteristic: BluetoothCharacteristic = {
+        ...this.characteristicForm.value,
+        infos: this.infos.value as BluetoothCharacteristicInfo[],
+      };
+
+      console.log(characteristic);
+
+      this.dialogRef.close(characteristic);
+    }
   }
 
-  addInfo() {
+
+
+  protected get infos(): FormArray {
+    return this.characteristicForm.get(this.FGK.Infos) as FormArray;
+  }
+
+  protected addInfo() {
     this.infos.push(this.createCharacteristicInfoForm());
   }
 
-  removeInfo(index: number) {
+  protected removeInfo(index: number) {
     this.infos.removeAt(index);
   }
+
+
+
 
 }
