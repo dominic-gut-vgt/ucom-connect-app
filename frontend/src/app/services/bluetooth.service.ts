@@ -52,7 +52,7 @@ export class BluetoothService {
     return new Observable<T>(observer => {
       (async () => {
         try {
-          if (deviceId.length>0 && service.length>0 &&characteristic.length>0) {
+          if (deviceId.length > 0 && service.length > 0 && characteristic.length > 0) {
             await BleClient.initialize();
 
             await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
@@ -62,7 +62,7 @@ export class BluetoothService {
 
             observer.next(value);
             observer.complete();
-          }else{
+          } else {
             observer.error(new Error('Invalid deviceId, service or characteristic'));
           }
         } catch (error) {
@@ -95,17 +95,39 @@ export class BluetoothService {
       (async () => {
         try {
           await BleClient.initialize();
+          console.log('++++++++connected');
           await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
 
           let valueAsDataView: DataView;
           switch (bluetoothDatatype) {
             case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value)); break;
+            case BluetoothDataType.Boolean:
+              const boolBuffer = new ArrayBuffer(1);
+              new DataView(boolBuffer).setUint8(0, value ? 1 : 0);
+              valueAsDataView = new DataView(boolBuffer);
+              break;
+
+            case BluetoothDataType.Uint8:
+              const uint8Buffer = new ArrayBuffer(1);
+              new DataView(uint8Buffer).setUint8(0, parseInt(value, 10));
+              valueAsDataView = new DataView(uint8Buffer);
+              break;
+
+            case BluetoothDataType.Int16:
+              const int16Buffer = new ArrayBuffer(2);
+              new DataView(int16Buffer).setInt16(0, parseInt(value, 10), true); // littleEndian = true
+              valueAsDataView = new DataView(int16Buffer);
+              break;
+
             default: valueAsDataView = hexStringToDataView(this.stringToHex(value))
           }
+
+          console.log('++++++++dataview',valueAsDataView);
+
           await BleClient.write(deviceId, service, characteristic, valueAsDataView);
           observer.next(true);
           observer.complete();
-
+          console.log('+++++++++completed writing ');
         } catch (error) {
           console.error(error);
           observer.error(error);

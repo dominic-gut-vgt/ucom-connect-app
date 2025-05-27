@@ -4,27 +4,19 @@
 @use '@angular/material' as mat;
 @use "./app/shared/styles/variables.scss";
 @use "./app/shared/styles/animations.scss";
+@use './app/shared/styles/theme/theme-colors' as custom-theme;
 
 html {
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      primary:  custom-theme.$primary-palette,
+      tertiary:  custom-theme.$tertiary-palette,
     ),
     typography: Roboto,
     density: 0,
   ));
-}/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+}
 
 html,
 body {

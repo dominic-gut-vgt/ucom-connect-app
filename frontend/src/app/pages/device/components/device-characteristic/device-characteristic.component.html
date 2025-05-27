@@ -8,7 +8,15 @@
       <div class="value-container">
         <p>Value:</p>
         <p [ngClass]="updated()?'value updated':'value'">
-          {{characteristic().value.length>0?characteristic().value:'No value'}}</p>
+          @switch (characteristic().dataType) {
+          @case(bluetoothDataType.Boolean){
+          {{characteristic().value?'True':'False'}}
+          }
+          @default {
+          {{characteristic().value.length>0?characteristic().value:'No value'}}
+          }
+          }
+        </p>
       </div>
       }
     </div>

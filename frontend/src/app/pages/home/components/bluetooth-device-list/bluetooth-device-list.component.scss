@@ -21,7 +21,15 @@
 
        .connect-btn {
          height: 100%;
+
+         &.not-ucom-connect-device{
+          color: var(--gray-500);
+         }
        }
      }
    }
+ }
+
+ .show-all-btn{
+  margin: var(--space-4) 0;
  }

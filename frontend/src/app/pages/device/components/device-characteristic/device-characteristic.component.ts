@@ -77,6 +77,24 @@ export class DeviceCharacteristicComponent {
             updatedCharacteristic.value = value;
             return updatedCharacteristic;
           });
+
+          console.log('+++++++Characteristic value read:', value);
+
+          //update form value
+          switch (this.characteristic().dataType) {
+            case BluetoothDataType.Boolean:
+              this.characteristicValueForm.get(this.FGK.BooleanValue)?.setValue(value as boolean);
+              break;
+            case BluetoothDataType.String:
+              this.characteristicValueForm.get(this.FGK.StringValue)?.setValue(value as string);
+              break;
+            case BluetoothDataType.Number:
+              this.characteristicValueForm.get(this.FGK.NumberValue)?.setValue(value as number);
+              break;
+            default:
+              console.warn('Unsupported data type for characteristic value update');
+          }
+
           this.updated.set(true);
           setTimeout(() => {
             this.updated.set(false);
