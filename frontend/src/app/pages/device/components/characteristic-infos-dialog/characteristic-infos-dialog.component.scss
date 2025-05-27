@@ -1,11 +1,13 @@
 .characteristic-infos-dialog{
   padding: var(--space-4);
+  max-height: 70dvh;
+  overflow-y: auto;
+
   .dialog-title{
     margin-bottom: var(--space-2);
   }
 
-  .info-item{
+  .info-item:not(:last-child){
     margin-bottom: var(--space-3);
-
   }
 }

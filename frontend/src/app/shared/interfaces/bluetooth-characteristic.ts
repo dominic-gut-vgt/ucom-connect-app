@@ -4,6 +4,7 @@ import { BluetoothDataType } from "../enums/bluetooth-data-type.enum";
 export interface BluetoothCharacteristicInfo {
   title: string,
   description: string,
+  valueKey?: string,// to map a received value to a info object 
 }
 export interface BluetoothCharacteristic {
   title: string,

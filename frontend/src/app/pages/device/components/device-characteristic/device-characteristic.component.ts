@@ -18,6 +18,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
+import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactristic-info.pipe';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
@@ -30,7 +31,7 @@ enum FormGroupKeys {
   selector: 'app-device-characteristic',
   templateUrl: './device-characteristic.component.html',
   styleUrls: ['./device-characteristic.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule,ValuetoToCharacteristicInfoPipe]
 })
 export class DeviceCharacteristicComponent {
   //injections

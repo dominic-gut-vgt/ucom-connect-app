@@ -78,7 +78,9 @@ export class BluetoothService {
       case BluetoothDataType.String:
         const byteArray = new Uint8Array(dataView.buffer);
         const decoder = new TextDecoder('utf-8');
-        return decoder.decode(byteArray) as T;
+        const rawString= decoder.decode(byteArray) as string;
+        return rawString.replace(/\0/g, '') as T; // remove null characters
+
       case BluetoothDataType.Number:
         return dataView.getUint32(0, true) as T; // true = little-endian
       case BluetoothDataType.Boolean:
@@ -134,18 +136,6 @@ export class BluetoothService {
         }
       })();
     })
-  }
-
-  private parseHeartRate(value: DataView): number {
-    const flags = value.getUint8(0);
-    const rate16Bits = flags & 0x1;
-    let heartRate: number;
-    if (rate16Bits > 0) {
-      heartRate = value.getUint16(1, true);
-    } else {
-      heartRate = value.getUint8(1);
-    }
-    return heartRate;
   }
 
   private stringToHex(str: string): string {

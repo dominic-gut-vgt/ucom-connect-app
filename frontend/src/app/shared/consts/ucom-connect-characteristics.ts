@@ -7,52 +7,64 @@ import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from "../interfa
 
 const CONSOLE_CHARACTERISTIC_INFOS: BluetoothCharacteristicInfo[] = [
   {
-    title: 'S1',
+    title: 'Status S1',
     description: 'The device is started and is waiting for an Internet connection',
+    valueKey: 'S1',
   },
   {
-    title: 'S2',
+    title: 'Status S2',
     description: 'The Wifi SSID or the Wifi password could not be parsed',
+    valueKey: 'S2',
   },
   {
-    title: 'S3',
+    title: 'Status S3',
     description: 'No Wifi SSID or Wifi password is configured',
+    valueKey: 'S3',
   },
   {
-    title: 'S4',
+    title: 'Status S4',
     description: 'The Wifi connection was interrupted',
+    valueKey: 'S4',
   },
   {
-    title: 'S5',
+    title: 'Status S5',
     description: 'The device has been assigned an IP',
+    valueKey: 'S5',
   },
   {
-    title: 'S6',
+    title: 'Status S6',
     description: 'The cloud URIs could not be parsed',
+    valueKey: 'S6',
   },
   {
-    title: 'S7',
+    title: 'Status S7',
     description: 'No cloud URIs are configured',
+    valueKey: 'S7',
   },
   {
-    title: 'S8',
+    title: 'Status S8',
     description: 'The DeviceID could not be parsed',
+    valueKey: 'S8',
   },
   {
-    title: 'S9',
+    title: 'Status S9',
     description: 'No DeviceID is configured',
+    valueKey: 'S9',
   },
   {
-    title: 'S10',
+    title: 'Status S10',
     description: 'An attempt is made to establish a connection to the cloud',
+    valueKey: 'S10',
   },
   {
-    title: 'S11',
+    title: 'Status S11',
     description: 'The device is connected to the cloud',
+    valueKey: 'S11',
   },
   {
-    title: 'S12',
+    title: 'Status S12',
     description: 'A reconnect has been initiated',
+    valueKey: 'S12',
   },
 ];
 
