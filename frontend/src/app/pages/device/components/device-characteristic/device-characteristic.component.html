@@ -5,7 +5,7 @@
       <div class="title-container">
         <h3>{{characteristic().title}}</h3>
         @if(characteristic().infos.length>0){
-        <button class="btn-icon" (click)="openCharacteristicInfosDialog()">
+        <button mat-icon-button (click)="openCharacteristicInfosDialog()">
           <fa-icon [icon]="infoIcon"></fa-icon>
         </button>
         }
@@ -41,7 +41,7 @@
     </div>
     @if(characteristic().bluetoothAction===bluetoothAction.Read
     ||characteristic().bluetoothAction===bluetoothAction.ReadWrite ){
-    <button [ngClass]="isReading()?'read-btn btn-icon is-reading':'read-btn btn-icon'" (click)="readCharacteristic()">
+    <button mat-icon-button [ngClass]="isReading()?'read-btn is-reading':'read-btn'" (click)="readCharacteristic()">
       <fa-icon [icon]="readIcon"></fa-icon>
     </button>
     }
@@ -51,24 +51,29 @@
   ||characteristic().bluetoothAction===bluetoothAction.ReadWrite ){
   <div class="input-container">
     <div class="input-wrapper">
-      <p class="label">{{characteristic().description}}</p>
       <form [formGroup]="characteristicValueForm">
 
         @switch (characteristic().dataType) {
         @case(bluetoothDataType.Boolean){
-        <mat-slide-toggle [formControlName]="FGK.BooleanValue"></mat-slide-toggle>
+        <mat-slide-toggle [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
         }
         @case (bluetoothDataType.Number){
-        <input type="number" [formControlName]="FGK.NumberValue" placeholder="Value to send">
+        <mat-form-field>
+          <mat-label>{{characteristic().description}}</mat-label>
+          <input matInput [formControlName]="FGK.NumberValue" placeholder="Value to send" />
+        </mat-form-field>
         }
         @default {
-        <input type="text" [formControlName]="FGK.StringValue" placeholder="Value to send">
-        }
+        <mat-form-field>
+          <mat-label>{{characteristic().description}}</mat-label>
+          <input matInput [formControlName]="FGK.StringValue" placeholder="Value to send" />
+        </mat-form-field> }
         }
       </form>
 
     </div>
-    <button [ngClass]="isWriting()?'write-btn btn-std is-writing':'write-btn btn-std'" (click)="writeCharacteristic()">
+    <button mat-flat-button [ngClass]="isWriting()?'write-btn btn-std is-writing':'write-btn btn-std'"
+      (click)="writeCharacteristic()">
       Send
     </button>
   </div>

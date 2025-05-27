@@ -24,7 +24,6 @@ export class CreateTemplatePage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('CreateTemplatePage initialized');
     this.template.set(this.templateService.getCurrentSelectedTemplate());
   }
 

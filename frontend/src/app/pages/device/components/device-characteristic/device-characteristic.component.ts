@@ -1,24 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, model, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject, input, model, output, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBook, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
-import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactristic-info.pipe';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
@@ -26,12 +20,11 @@ enum FormGroupKeys {
   NumberValue = 'numberValue',
 }
 
-
 @Component({
   selector: 'app-device-characteristic',
   templateUrl: './device-characteristic.component.html',
   styleUrls: ['./device-characteristic.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule,ValuetoToCharacteristicInfoPipe]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule,ValuetoToCharacteristicInfoPipe,MatButtonModule,MatInput,MatLabel,MatFormField]
 })
 export class DeviceCharacteristicComponent {
   //injections
@@ -43,13 +36,16 @@ export class DeviceCharacteristicComponent {
   characteristic = model.required<BluetoothCharacteristic>();
   deviceId = input.required<string | undefined>();
 
+  //outputs
+  readEvent=output<void>();
+  writtenEvent=output<void>();
+
   //consts
   protected readonly FGK = FormGroupKeys;
   protected readonly bluetoothAction = BluetoothAction;
   protected readonly bluetoothDataType = BluetoothDataType;
   protected readonly readIcon = faBook;
   protected readonly infoIcon = faInfoCircle;
-
 
   //flags
   private initiallyLoaded = false;
@@ -59,7 +55,6 @@ export class DeviceCharacteristicComponent {
 
   //form
   protected characteristicValueForm!: FormGroup;
-
 
   constructor() {
     effect(() => {
@@ -85,9 +80,8 @@ export class DeviceCharacteristicComponent {
     });
   }
 
-
   //read & write ------------------------------------------------------------
-  protected readCharacteristic(): void {
+  public readCharacteristic(): void {
     if (!this.isReading()) {
       this.isReading.set(true);
       this.bluetoothService.readCharacteristic(this.deviceId() ?? '', this.characteristic().serviceUUID, this.characteristic().uuid, this.characteristic().dataType).subscribe({
@@ -97,8 +91,6 @@ export class DeviceCharacteristicComponent {
             updatedCharacteristic.value = value;
             return updatedCharacteristic;
           });
-
-          console.log('+++++++Characteristic value read:', value);
 
           //update form value
           switch (this.characteristic().dataType) {
@@ -131,15 +123,13 @@ export class DeviceCharacteristicComponent {
 
   protected writeCharacteristic(): void {
     if (!this.isWriting()) {
-
       const value = this.getWriteValue();
-      console.log('Writing value:', value);
       this.isWriting.set(true);
       this.bluetoothService.writeCharacteristic(this.deviceId() ?? '', this.characteristic().serviceUUID, this.characteristic().uuid, value, this.characteristic().dataType).subscribe({
-        next: (worked) => {
-          console.log(worked);
+        next: () => {
           this.readCharacteristic();
           this.isWriting.set(false);
+          this.writtenEvent.emit();
         },
         error: (error) => {
           console.log(error);

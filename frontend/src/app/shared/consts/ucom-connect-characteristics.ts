@@ -82,6 +82,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.Read,
     value: true,
     infos: CONSOLE_CHARACTERISTIC_INFOS,
+    readAfterEveryWrite: true,
   },
   {
     title: 'Cloud URI',
@@ -92,6 +93,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.ReadWrite,
     value: '',
     infos: [],
+    readAfterEveryWrite: false,
   },
   {
     title: 'WifiSSID',
@@ -102,6 +104,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.ReadWrite,
     value: '',
     infos: [],
+    readAfterEveryWrite: false,
   },
   {
     title: 'Restart',
@@ -112,6 +115,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.Write,
     value: true,
     infos: [],
+    readAfterEveryWrite: false,
   },
   {
     title: 'Reconnect',
@@ -122,6 +126,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.Write,
     value: true,
     infos: [],
+    readAfterEveryWrite: false,
   },
   {
     title: 'Wifi Password',
@@ -132,6 +137,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.Write,
     value: '',
     infos: [],
+    readAfterEveryWrite: false,
   },
   {
     title: 'Autorestart',
@@ -142,5 +148,6 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
     bluetoothAction: BluetoothAction.Read,
     value: true,
     infos: [],
+    readAfterEveryWrite: false,
   }
 ];

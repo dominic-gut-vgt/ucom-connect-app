@@ -47,9 +47,7 @@ export class HomePage {
       this.isScanning.set(isScanning);
     });
     this.bluetoothService.scanResultUpdated.subscribe((scanResult) => {
-      console.log("++++++", scanResult);
       if (!this.scanResults().find(res => res.device.deviceId === scanResult.device.deviceId)) {
-        console.log("+++++++++ not in list");
         this.scanResults.update((state) => {
           let updatedScanResults = [...state];
           updatedScanResults.push(scanResult);

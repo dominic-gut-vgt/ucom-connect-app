@@ -11,8 +11,10 @@ export interface BluetoothCharacteristic {
   description: string,
   uuid: string,
   serviceUUID: string,
+  deviceId?: string,
   dataType: BluetoothDataType,
   bluetoothAction: BluetoothAction,
   value: any,
   infos: BluetoothCharacteristicInfo[];
+  readAfterEveryWrite:boolean
 }

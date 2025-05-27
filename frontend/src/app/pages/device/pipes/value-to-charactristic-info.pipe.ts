@@ -8,10 +8,9 @@ import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth
 })
 export class ValuetoToCharacteristicInfoPipe implements PipeTransform {
   transform(value: string, infos: BluetoothCharacteristicInfo[]): BluetoothCharacteristicInfo | undefined {
-    console.log("++++++++++",value, infos);
-    if (!value || infos.length === 0) {
+    if (!value || infos.length === 0 || typeof value !== 'string') {
       return undefined;
     }
-    return infos.find(info => info.valueKey?.toLowerCase() === value.toLowerCase());
+    return infos.find(info => info.valueKey?.toLowerCase() === value?.toLowerCase());
   }
 }

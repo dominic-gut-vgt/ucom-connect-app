@@ -1,5 +1,5 @@
 export enum BluetoothAction{
-Read,
-Write,
-ReadWrite
+Read='Read',
+Write='Write',
+ReadWrite='Read & Write',
 }

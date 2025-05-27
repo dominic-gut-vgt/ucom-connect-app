@@ -70,45 +70,6 @@ p {
   margin: 0px
 }
 
-//inputs-------------------------------------
-input {
-  width: 100%;
-  border: solid 1px var(--gray-300);
-  border-radius: var(--radius-l);
-  padding: var(--space-3);
-  box-shadow: var(--box-shadow-light);
-}
-
-input::placeholder {
-  color: var(--gray-500);
-}
-
-input:focus {
-  outline: none;
-}
-
-label,.label {
-  font-size: var(--fs-10);
-  color: var(--gray-500);
-  margin-bottom: var(--space-2);
-}
-
-//buttons------------------------------------
-.btn-std {
-  width: 100%;
-  border-radius: var(--radius-l);
-  box-shadow: var(--box-shadow-std);
-  text-transform: uppercase;
-  color: var(--color-primary);
-  font-size: var(--fs-18);
-  padding: var(--space-3) var(--space-4);
-}
-
-.btn-icon {
-  color: var(--color-primary);
-  padding: var(--space-3);
-  font-size: var(--fs-18);
-}
 
 //cards--------------------------------------
 .card-std {

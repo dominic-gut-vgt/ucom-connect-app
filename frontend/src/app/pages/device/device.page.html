@@ -1,14 +1,17 @@
 <div class="page-container">
   <div class="width-wrapper">
-    <h1>{{scanResult()?.device?.name}}</h1>
-
-      <ul class="characteristics-list">
-        @for(characteristic of ucomConnectCharacteristics;track characteristic){
-        <li class="characteristics-item card-std">
-          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic" ></app-device-characteristic>
-        </li>
-        }
-      </ul>
+    <div class="device-page-header">
+      <h1 class="device-name">{{scanResult()?.device?.name}}</h1>
+      <button mat-button class="add-btn" (click)="openCreateCharacteristicDialog()" > <fa-icon [icon]="addIcon"></fa-icon> characteristic </button>
+    </div>
+    <ul class="characteristics-list">
+      @for(characteristic of ucomConnectCharacteristics;track characteristic){
+      <li class="characteristics-item card-std">
+        <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic"
+          (writtenEvent)="onCharacteristicWritten()"></app-device-characteristic>
+      </li>
+      }
+    </ul>
 
   </div>
 </div>

@@ -31,7 +31,7 @@ export class BluetoothService {
 
     //initial check
     BleClient.isEnabled().then((enabled) => {
-      this.bluetoothEnabledUpdated.emit(enabled && Capacitor.isNativePlatform());
+      this.bluetoothEnabledUpdated.emit(enabled);
     }).catch((error) => {
       this.bluetoothEnabledUpdated.emit(false);
     });
@@ -91,13 +91,10 @@ export class BluetoothService {
   }
 
   public writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Observable<boolean> {
-    console.log('++++++++++++++1', deviceId, service, characteristic, value, bluetoothDatatype);
-
     return new Observable<boolean>(observer => {
       (async () => {
         try {
           await BleClient.initialize();
-          console.log('++++++++connected');
           await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
 
           let valueAsDataView: DataView;
@@ -124,12 +121,9 @@ export class BluetoothService {
             default: valueAsDataView = hexStringToDataView(this.stringToHex(value))
           }
 
-          console.log('++++++++dataview',valueAsDataView);
-
           await BleClient.write(deviceId, service, characteristic, valueAsDataView);
           observer.next(true);
           observer.complete();
-          console.log('+++++++++completed writing ');
         } catch (error) {
           console.error(error);
           observer.error(error);
@@ -151,20 +145,17 @@ export class BluetoothService {
       try {
         await BleClient.initialize();
 
-        console.log("++++++++start scanning");
         await BleClient.requestLEScan(
           {
             services: this.SERVICES,
           },
           result => {
             this.scanResultUpdated.emit(result);
-            console.log('+++++++received new scan result', result);
           },
         );
 
         setTimeout(async () => {
           await BleClient.stopLEScan();
-          console.log('+++++++++stopped scanning');
           this.setIsScanning(false);
         }, 10000);
       } catch (error) {
@@ -178,7 +169,6 @@ export class BluetoothService {
   private setIsScanning(state: boolean): void {
     this.isScanning = state;
     this.isScanningUpdated.emit(state);
-
   }
 
 }
