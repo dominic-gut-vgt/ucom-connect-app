@@ -2,13 +2,22 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, input, model, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBook } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
-
+import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
@@ -27,6 +36,7 @@ export class DeviceCharacteristicComponent {
   //injections
   private bluetoothService = inject(BluetoothService);
   private fb = inject(FormBuilder);
+  readonly dialog = inject(MatDialog);
 
   //inputs
   characteristic = model.required<BluetoothCharacteristic>();
@@ -35,8 +45,10 @@ export class DeviceCharacteristicComponent {
   //consts
   protected readonly FGK = FormGroupKeys;
   protected readonly bluetoothAction = BluetoothAction;
-  protected readonly readIcon = faBook;
   protected readonly bluetoothDataType = BluetoothDataType;
+  protected readonly readIcon = faBook;
+  protected readonly infoIcon = faInfoCircle;
+
 
   //flags
   private initiallyLoaded = false;
@@ -65,8 +77,15 @@ export class DeviceCharacteristicComponent {
     });
   }
 
+  //dialog -------------------------------------------------------------------
+  openCharacteristicInfosDialog(): void {
+    this.dialog.open(CharacteristicInfosDialogComponent, {
+      data: this.characteristic().infos,
+    });
+  }
 
-  //characteristics------------------------------------------------------------
+
+  //read & write ------------------------------------------------------------
   protected readCharacteristic(): void {
     if (!this.isReading()) {
       this.isReading.set(true);

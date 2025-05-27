@@ -1,0 +1,12 @@
+<div class="characteristic-infos-dialog">
+  <h2 class="dialog-title">Characteristic Infos</h2>
+
+  <ul class="infos-list">
+    @for(info of infos;track info){
+    <li class="info-item">
+      <h3 class="item-title">{{info.title}}</h3>
+      <p>{{info.description}}</p>
+    </li>
+    }
+  </ul>
+</div>
