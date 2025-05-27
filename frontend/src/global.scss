@@ -6,6 +6,9 @@
 @use "./app/shared/styles/animations.scss";
 @use './app/shared/styles/theme/theme-colors' as custom-theme;
 
+@use "tailwindcss";
+
+
 html {
   @include mat.theme((
     color: (

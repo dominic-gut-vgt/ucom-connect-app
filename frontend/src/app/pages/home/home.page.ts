@@ -7,13 +7,14 @@ import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { BluetoothDeviceListComponent } from './components/bluetooth-device-list/bluetooth-device-list.component';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { Capacitor } from '@capacitor/core';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, BluetoothDeviceListComponent]
+  imports: [CommonModule, FontAwesomeModule, BluetoothDeviceListComponent,MatButtonModule]
 })
 export class HomePage {
 

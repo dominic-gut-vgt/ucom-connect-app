@@ -1,27 +1,28 @@
-<div class="create-or-update-characteristic-dialog">
-  <h1>Create Characteristic</h1>
-  <form [formGroup]="characteristicForm" class="form-container">
-    <mat-form-field>
+<div class="create-or-update-characteristic-dialog p-5">
+  <h1 class="py-5">Create Characteristic</h1>
+
+  <form [formGroup]="characteristicForm" class="form-container w-full">
+    <mat-form-field appearance="outline" class="w-full">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Description</mat-label>
       <input matInput formControlName="description" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>UUID</mat-label>
       <input matInput formControlName="uuid" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Service UUID</mat-label>
       <input matInput formControlName="serviceUUID" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Data Type</mat-label>
       <mat-select formControlName="dataType">
         @for(dt of bluetoothDataTypes; track dt) {
@@ -30,7 +31,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Bluetooth Action</mat-label>
       <mat-select formControlName="bluetoothAction">
         @for(action of bluetoothActions; track action) {
@@ -39,36 +40,40 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox formControlName="readAfterEveryWrite">Read After Every Write</mat-checkbox>
+    <mat-checkbox formControlName="readAfterEveryWrite" class="mb-5 flex items-center justify-center">Read After Every
+      Write</mat-checkbox>
 
     <div formArrayName="infos" class="info-array">
       @for(info of infos.controls; track info){
-      <div [formGroupName]="$index" class="info-group">
-        <h3>Info #{{ $index + 1 }}</h3>
-
-        <mat-form-field>
+      <div [formGroupName]="$index" class="info-group mb-4">
+        <div class="flex flex-row items-center justify-between mb-2">
+          <h3>Info #{{ $index + 1 }}</h3>
+          <button mat-icon-button color="danger" (click)="removeInfo($index)">
+            <fa-icon [icon]="deleteIcon"></fa-icon>
+          </button>
+        </div>
+        <mat-form-field class="w-full">
           <mat-label>Title</mat-label>
           <input matInput formControlName="title" />
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="w-full">
           <mat-label>Description</mat-label>
           <input matInput formControlName="description" />
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="w-full">
           <mat-label>Value Key</mat-label>
           <input matInput formControlName="valueKey" />
         </mat-form-field>
-
-        <button mat-icon-button color="warn" (click)="removeInfo($index)">
-          <fa-icon [icon]="deleteIcon"></fa-icon>
-        </button>
       </div>
       }
     </div>
 
-    <button mat-button color="primary" type="button" (click)="addInfo()">Add Info</button>
-    <button mat-raised-button color="accent" type="submit" [disabled]="characteristicForm.invalid">Submit</button>
+    <div class="flex w-full gap-2" >
+      <button class="w-1/2" mat-button color="primary" type="button"(click)="addInfo()">Add Info</button>
+      <button class="w-1/2" mat-raised-button color="accent" type="submit" [disabled]="characteristicForm.invalid">Submit</button>
+    </div>
+
   </form>
 </div>
