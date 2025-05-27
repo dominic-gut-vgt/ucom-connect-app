@@ -5,10 +5,14 @@
 @use "./app/shared/styles/variables.scss";
 @use "./app/shared/styles/animations.scss";
 @use './app/shared/styles/theme/theme-colors' as custom-theme;
-
 @use "tailwindcss";
 
 
+//fixed material style
+@use './app/shared/styles/base/form-fields.scss';
+@use './app/shared/styles/base/buttons.scss';
+
+// material theme
 html {
   @include mat.theme((
     color: (

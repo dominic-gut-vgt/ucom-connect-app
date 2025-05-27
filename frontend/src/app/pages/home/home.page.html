@@ -1,5 +1,5 @@
 <div class="page-container">
-  <div class="width-wrapper">
+  <div class="width-wrapper flex flex-col justify-center">
 
     @if(bluetoothEnabled()){
     <button  mat-flat-button class="btn-std scan-btn" (click)="scanForDevices()">
@@ -9,7 +9,7 @@
 
     <app-bluetooth-device-list [scanResults]="scanResults()"></app-bluetooth-device-list>
     }@else {
-    <div mat-flat-button class="bluetooth-disabled-info">
+    <div class="bluetooth-disabled-info">
       <p><fa-icon [icon]="infoIcon"></fa-icon> Bluetooth is disabled. Please enable Bluetooth to scan for devices.</p>
     </div>
     }

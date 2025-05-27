@@ -2,7 +2,7 @@
   <div class="width-wrapper">
     <div class="device-page-header">
       <h1 class="device-name">{{scanResult()?.device?.name}}</h1>
-      <button mat-button class="add-btn" (click)="openCreateCharacteristicDialog()" > <fa-icon [icon]="addIcon"></fa-icon> characteristic </button>
+      <button mat-flat-button class="add-btn" (click)="openCreateCharacteristicDialog()" > <fa-icon [icon]="addIcon"></fa-icon> characteristic </button>
     </div>
     <ul class="characteristics-list">
       @for(characteristic of ucomConnectCharacteristics;track characteristic){

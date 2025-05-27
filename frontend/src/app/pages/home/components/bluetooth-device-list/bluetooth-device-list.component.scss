@@ -19,17 +19,18 @@
        display: flex;
        align-items: center;
 
-       .connect-btn {
+       .icon {
          height: 100%;
+         color: var(--color-primary);
 
-         &.not-ucom-connect-device{
-          color: var(--gray-500);
+         &.clickable {
+           color: var(--gray-500);
          }
        }
      }
    }
  }
 
- .show-all-btn{
-  margin: var(--space-4) 0;
+ .show-all-btn {
+   margin: var(--space-4) 0;
  }

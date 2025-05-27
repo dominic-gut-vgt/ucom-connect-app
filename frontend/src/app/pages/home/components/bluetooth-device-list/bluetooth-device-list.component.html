@@ -1,6 +1,7 @@
 <h1>{{showAllDevices()?'All':'UCOM-CONNECT'}} Devices</h1>
 @if(filteredScanResults().length===0){
-<p class="no-devices-info">Currently no devices found. Sometimes the UCOM-Connect device has to be reset (Push button next to status-led for three seconds. Disconnect and reconnect device to power)</p>
+<p class="no-devices-info">Currently no devices found. Sometimes the UCOM-Connect device has to be reset (Push button
+  next to status-led for three seconds. Disconnect and reconnect device to power)</p>
 }
 <ul class="scan-results-list">
   @for(result of filteredScanResults();track result){
@@ -23,8 +24,7 @@
       </ul>
     </div>
     <div class="action-container">
-      <button [ngClass]="isUcomConnectDevice?'connect-btn btn-icon':'connect-btn btn-icon not-ucom-connect-device'"
-        (click)="goToDevice(result,isUcomConnectDevice)">
+      <button mat-icon-button [disabled]="!isUcomConnectDevice" (click)="goToDevice(result,isUcomConnectDevice)">
         <fa-icon [icon]="actionIcon"></fa-icon>
       </button>
     </div>
@@ -32,8 +32,8 @@
   }
 </ul>
 
-@if(filteredScanResults().length<scanResults().length || showAllDevices()){ <button class="btn-std show-all-btn"
-  (click)="toggleShowAllDevices()">
+@if(filteredScanResults().length<scanResults().length || showAllDevices()){ <button mat-button
+  class="btn-std show-all-btn" (click)="toggleShowAllDevices()">
   {{showAllDevices() ? 'Show less devices' : 'Show all devices'}}
   </button>
   }

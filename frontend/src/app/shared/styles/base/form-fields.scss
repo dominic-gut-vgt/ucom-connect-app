@@ -1,0 +1,8 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.form-field-overrides((filled-container-color: var(--gray-50),
+      filled-caret-color: var(--gray-300),
+      filled-focus-active-indicator-color: var(--color-primary),
+    ));
+}

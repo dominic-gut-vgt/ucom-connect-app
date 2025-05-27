@@ -7,12 +7,13 @@ import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import { APP_DATA } from 'src/app/shared/consts/app-data';
 import { PAGES } from 'src/app/shared/consts/routes';
 import { IsUcomConnectDevicePipe } from '../../pipes/is-ucom-connect-device.pipe';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-bluetooth-device-list',
   templateUrl: './bluetooth-device-list.component.html',
   styleUrls: ['./bluetooth-device-list.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, IsUcomConnectDevicePipe]
+  imports: [CommonModule, FontAwesomeModule, IsUcomConnectDevicePipe, MatButtonModule]
 })
 export class BluetoothDeviceListComponent {
   //injections

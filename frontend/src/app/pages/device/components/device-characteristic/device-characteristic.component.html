@@ -58,7 +58,7 @@
         <mat-slide-toggle class="w-full" [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
         }
         @case (bluetoothDataType.Number){
-        <mat-form-field class="w-full">
+        <mat-form-field class="" appearance="outline">
           <mat-label>{{characteristic().description}}</mat-label>
           <input matInput [formControlName]="FGK.NumberValue" placeholder="Value to send" />
         </mat-form-field>
@@ -72,7 +72,7 @@
       </form>
 
     </div>
-    <button mat-flat-button [ngClass]="isWriting()?'write-btn btn-std is-writing mt-5':'write-btn btn-std mt-5'"
+    <button mat-flat-button class="mt-5" [ngClass]="isWriting()?'write-btn is-writing mt-5':'write-btn mt-5'"
       (click)="writeCharacteristic()">
       Send
     </button>
