@@ -3,7 +3,7 @@ import { BluetoothDataType } from "../enums/bluetooth-data-type.enum";
 import { BluetoothCharacteristic } from "../interfaces/bluetooth-characteristic";
 import { Template } from "../interfaces/templates/template.interface";
 import { UcomConnectSetupTemplateData } from "../interfaces/templates/ucom-connect-template-data.interface";
-
+import {v4 as uuid} from 'uuid';
 
 class EmptyObjects {
   getEmptyUcomConnectTemplateData(): UcomConnectSetupTemplateData {
@@ -21,6 +21,7 @@ export const EMPTY_OBJECTS = new EmptyObjects();
 
 
 const BLUETOOTH_CHARACTERISTIC: BluetoothCharacteristic = {
+  id: '',
   title: '',
   description: '',
   uuid: '',

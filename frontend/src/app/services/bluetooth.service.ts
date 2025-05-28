@@ -31,7 +31,7 @@ export class BluetoothService {
 
     //initial check
     BleClient.isEnabled().then((enabled) => {
-      this.bluetoothEnabledUpdated.emit(enabled);
+      this.bluetoothEnabledUpdated.emit(enabled && Capacitor.isNativePlatform());
     }).catch((error) => {
       this.bluetoothEnabledUpdated.emit(false);
     });

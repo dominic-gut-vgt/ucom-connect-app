@@ -40,9 +40,9 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [formControlName]="FGK.ReadAfterEveryWrite" class="mb-5 flex items-center justify-center">Read After
-      Every
-      Write</mat-checkbox>
+    <mat-checkbox [formControlName]="FGK.ReadAfterEveryWrite" class="mb-5 flex items-center justify-center">
+      Read After Every Write
+    </mat-checkbox>
 
     <div formArrayName="infos" class="info-array">
       @for(info of infos.controls; track info){

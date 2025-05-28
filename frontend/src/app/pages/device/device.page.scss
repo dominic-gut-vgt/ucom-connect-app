@@ -1,23 +1,5 @@
-.width-wrapper {
-
-  .device-page-header{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    .device-name{
-      width: 100%;
-      margin-bottom: var(--space-2);
-    }
-
-    .add-btn{
-        margin-bottom: var(--space-3);
-        text-align: left;
-        padding: 0;
-    }
-  }
-
-  .characteristics-list {
-    padding-bottom: var(--space-5);
-  }
+.divider{
+  width: 100%;
+  height: 1px;
+  background-color: var(--gray-300);
 }

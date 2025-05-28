@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, input, model, output, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBook, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactristic-info.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
@@ -24,7 +24,7 @@ enum FormGroupKeys {
   selector: 'app-device-characteristic',
   templateUrl: './device-characteristic.component.html',
   styleUrls: ['./device-characteristic.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule,ValuetoToCharacteristicInfoPipe,MatButtonModule,MatInput,MatLabel,MatFormField]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule, ValuetoToCharacteristicInfoPipe, MatButtonModule, MatInput, MatLabel, MatFormField]
 })
 export class DeviceCharacteristicComponent {
   //injections
@@ -35,10 +35,12 @@ export class DeviceCharacteristicComponent {
   //inputs
   characteristic = model.required<BluetoothCharacteristic>();
   deviceId = input.required<string | undefined>();
+  isSelfCreated = input.required<boolean>();
 
   //outputs
-  readEvent=output<void>();
-  writtenEvent=output<void>();
+  readEvent = output<void>();
+  writtenEvent = output<void>();
+  editCharacteristicEvent = output<void>();
 
   //consts
   protected readonly FGK = FormGroupKeys;
@@ -46,6 +48,7 @@ export class DeviceCharacteristicComponent {
   protected readonly bluetoothDataType = BluetoothDataType;
   protected readonly readIcon = faBook;
   protected readonly infoIcon = faInfoCircle;
+  protected readonly editIcon = faPen;
 
   //flags
   private initiallyLoaded = false;
@@ -139,6 +142,10 @@ export class DeviceCharacteristicComponent {
     }
   }
 
+  protected editCharacteristic(): void {
+    this.editCharacteristicEvent.emit();
+  }
+
   private getWriteValue(): any {
     switch (this.characteristic().dataType) {
       case BluetoothDataType.Boolean: return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
@@ -147,5 +154,7 @@ export class DeviceCharacteristicComponent {
       default: ''
     }
   }
+
+
 
 }

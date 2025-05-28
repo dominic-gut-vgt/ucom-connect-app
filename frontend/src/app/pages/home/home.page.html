@@ -1,16 +1,19 @@
 <div class="page-container">
-  <div class="width-wrapper flex flex-col justify-center">
+  <div class="width-wrapper mb-5 flex flex-col justify-center">
 
     @if(bluetoothEnabled()){
-    <button  mat-flat-button class="btn-std scan-btn" (click)="scanForDevices()">
+    <button mat-flat-button class="scan-btn mb-5" (click)="scanForDevices()">
       <fa-icon [ngClass]="isScanning()?'scan-icon scanning':'scan-icon'" [icon]="scanIcon"></fa-icon>
       {{isScanning()?'Searching for devices':'Search for devices'}}
     </button>
 
     <app-bluetooth-device-list [scanResults]="scanResults()"></app-bluetooth-device-list>
     }@else {
-    <div class="bluetooth-disabled-info">
-      <p><fa-icon [icon]="infoIcon"></fa-icon> Bluetooth is disabled. Please enable Bluetooth to scan for devices.</p>
+    <div class="bluetooth-disabled-info flex flex-col items-center">
+      <h1 class="pb-3 text-5xl text-gray-500">
+        <fa-icon [icon]="bluetoothIcon"></fa-icon>
+      </h1>
+      <p class="text-gray-500 text-center">Bluetooth is disabled. Please enable Bluetooth to scan for devices.</p>
     </div>
     }
   </div>

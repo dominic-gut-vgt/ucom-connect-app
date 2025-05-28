@@ -2,7 +2,12 @@
 
   <div class="card-header">
     <div class="infos">
-      <div class="title-container">
+      <div class="flex items-center">
+        @if(isSelfCreated()){
+        <button mat-icon-button (click)="editCharacteristic()">
+          <fa-icon [icon]="editIcon"></fa-icon>
+        </button>
+        }
         <h3>{{characteristic().title}}</h3>
         @if(characteristic().infos.length>0){
         <button mat-icon-button (click)="openCharacteristicInfosDialog()">
@@ -12,6 +17,8 @@
       </div>
       @if(characteristic().bluetoothAction===bluetoothAction.Read
       ||characteristic().bluetoothAction===bluetoothAction.ReadWrite){
+
+      <!-- Value -->
       <div class="value-container">
         <p>Value:</p>
         <p [ngClass]="updated()?'value updated':'value'">
@@ -25,6 +32,13 @@
           }
         </p>
       </div>
+
+      <!-- Description -->
+      @if(characteristic().bluetoothAction===bluetoothAction.Read){
+      <p>
+        {{characteristic().description}}
+      </p>
+      }
 
       @if(characteristic().infos.length>0){
 
@@ -55,7 +69,8 @@
 
         @switch (characteristic().dataType) {
         @case(bluetoothDataType.Boolean){
-        <mat-slide-toggle class="w-full" [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
+        <mat-slide-toggle class="w-full"
+          [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
         }
         @case (bluetoothDataType.Number){
         <mat-form-field class="" appearance="outline">

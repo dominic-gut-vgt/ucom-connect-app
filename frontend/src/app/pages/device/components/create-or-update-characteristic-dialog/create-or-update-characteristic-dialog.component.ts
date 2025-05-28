@@ -13,8 +13,12 @@ import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
+import { v4 as uuid } from 'uuid';
 
 enum FormGroupKeys {
+  Id = 'id',
   Title = 'title',
   Description = 'description',
   UUID = 'uuid',
@@ -39,15 +43,19 @@ enum FormGroupKeys {
 
 export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
   //injections
-  readonly dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
-  readonly characteristic = inject<BluetoothCharacteristic>(MAT_DIALOG_DATA);
+  private dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
+  private characteristic = inject<BluetoothCharacteristic>(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
+  private localStorageService = inject(LocalStorageService);
 
   //consts
   protected readonly FGK = FormGroupKeys;
   protected readonly bluetoothActions = Object.values(BluetoothAction);
   protected readonly bluetoothDataTypes = Object.values(BluetoothDataType);
   protected readonly deleteIcon = faTrash;
+
+  //data
+  private characteristics: BluetoothCharacteristic[] = [];
 
   //form
   protected characteristicForm!: FormGroup;
@@ -58,6 +66,11 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
 
   ngOnInit() {
     this.createCharacteristicForm(this.characteristic);
+    this.localStorageService.getItem<BluetoothCharacteristic[]>(LocalStorageKey.Characteristics).then((characteristics) => {
+      if (characteristics) {
+        this.characteristics = characteristics;
+      }
+    })
   }
 
   createCharacteristicInfoForm(info?: BluetoothCharacteristicInfo): FormGroup {
@@ -70,6 +83,7 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
 
   createCharacteristicForm(characteristic: BluetoothCharacteristic): void {
     this.characteristicForm = this.fb.group({
+      [this.FGK.Id]: [characteristic?.id || uuid(), Validators.required],
       [this.FGK.Title]: [characteristic?.title || '', Validators.required],
       [this.FGK.Description]: [characteristic?.description || '', Validators.required],
       [this.FGK.UUID]: [characteristic?.uuid || '', Validators.required],
@@ -89,12 +103,20 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
     if (this.characteristicForm.valid) {
       const characteristic: BluetoothCharacteristic = {
         ...this.characteristicForm.value,
-        infos: this.infos.value as BluetoothCharacteristicInfo[],
+        [this.FGK.Infos]: this.infos.value as BluetoothCharacteristicInfo[],
       };
 
       console.log(characteristic);
+      if (!this.characteristics.find(c => c.id === characteristic.id)) {
+        this.characteristics.push(characteristic);
+      } else {
+       this.characteristics= this.characteristics.map(c => c.id === characteristic.id ? characteristic : c);
+        console.log(this.characteristics);
+      }
 
-      this.dialogRef.close(characteristic);
+      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
+        this.dialogRef.close(characteristic);
+      });
     }
   }
 

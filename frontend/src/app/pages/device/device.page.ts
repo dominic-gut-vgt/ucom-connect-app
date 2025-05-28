@@ -14,17 +14,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
 import { MatButtonModule } from '@angular/material/button';
 import { CreateOrUpdateCharacteristicDialogComponent } from './components/create-or-update-characteristic-dialog/create-or-update-characteristic-dialog.component';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 
 @Component({
   selector: 'app-device',
   templateUrl: './device.page.html',
   styleUrls: ['./device.page.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, DeviceCharacteristicComponent,MatButtonModule]
+  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, DeviceCharacteristicComponent, MatButtonModule]
 })
 export class DevicePage implements OnInit {
   private router = inject(Router);
-  readonly dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
+  private localStorageService = inject(LocalStorageService);
 
   //consts
   protected readonly ucomConnectCharacteristics: BluetoothCharacteristic[] = JSON.parse(JSON.stringify(UCOM_CONNECT_CHARACTERISTICS));
@@ -36,11 +39,13 @@ export class DevicePage implements OnInit {
 
   //data
   protected scanResult = signal<ScanResult | undefined>(undefined);
+  protected selfCreatedCharacteristics = signal<BluetoothCharacteristic[]>([]);
 
 
   ngOnInit() {
     const nav = this.router.getCurrentNavigation();
     this.scanResult.set(nav?.extras?.state?.[ROUTE_PARAM_IDS.scanResult]);
+    this.loadSelfCreatedCharacteristics();
   }
 
   onCharacteristicWritten(): void {
@@ -51,13 +56,32 @@ export class DevicePage implements OnInit {
     });
   }
 
-    //dialog -------------------------------------------------------------------
-    openCreateCharacteristicDialog(): void {
-      let emptyCharacteristic=EMPTY_OBJECTS.getEmptyBluetoothCharacteristic();
-      emptyCharacteristic.deviceId = this.scanResult()?.device.deviceId;
-      this.dialog.open(CreateOrUpdateCharacteristicDialogComponent, {
-        data: emptyCharacteristic,
-      });
+  private loadSelfCreatedCharacteristics(): void {
+    this.localStorageService.getItem<BluetoothCharacteristic[]>(LocalStorageKey.Characteristics).then((characteristics) => {
+      console.log(characteristics);
+      if (characteristics) {
+        this.selfCreatedCharacteristics.set(characteristics);
+      }
+    });
+  }
+
+  //dialog -------------------------------------------------------------------
+  openCreateOrUpdateCharacteristicDialog(characteristic: BluetoothCharacteristic | undefined = undefined): void {
+    if (!characteristic) {
+      characteristic = EMPTY_OBJECTS.getEmptyBluetoothCharacteristic();
+      characteristic.deviceId = this.scanResult()?.device.deviceId;
     }
+    const dialogRef = this.dialog.open(CreateOrUpdateCharacteristicDialogComponent, {
+      data: characteristic,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.loadSelfCreatedCharacteristics();
+    });
+  }
+
+  openEditCharacteristicDialog(characteristic: BluetoothCharacteristic): void {
+    this.openCreateOrUpdateCharacteristicDialog(characteristic);
+  }
 
 }

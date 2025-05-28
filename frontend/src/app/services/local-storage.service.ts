@@ -11,22 +11,22 @@ export class LocalStorageService {
 
   constructor() { }
 
-  async setItem<T>(key: string, value: T) {
+  public async setItem<T>(key: string, value: T) {
     await Preferences.set({
       key: `${this.APP_KEY}-${key}`,
       value: JSON.stringify(value)
     });
   }
 
-  async getItem<T>(key: LocalStorageKey): Promise<T | undefined> {
-    const ret = await Preferences.get({ key: key });
+  public async getItem<T>(key: LocalStorageKey): Promise<T | undefined> {
+    const ret = await Preferences.get({ key: `${this.APP_KEY}-${key}` });
     if (ret.value !== null) {
       return JSON.parse(ret.value) as T;
     }
     return undefined;
   }
 
-  private async removeItem(key: string): Promise<void> {
+  public async removeItem(key: string): Promise<void> {
     await Preferences.remove({ key: key });
   };
 
