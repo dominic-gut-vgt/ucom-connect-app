@@ -3,8 +3,6 @@ export const LEVEL_ONE_ROUTES = {
   info: 'Info',
   settings: 'Settings',
   templates: 'Templates',
-  createTemplate: 'CreateTemplate',
-  createdTemplate: 'CreatedTemplate',
   device: 'Device',
 }
 
@@ -40,15 +38,5 @@ export const PAGES = {
     route: `${LEVEL_ONE_ROUTES.templates}`,
     relativeRoute: `${LEVEL_ONE_ROUTES.templates}`,
     name: 'Templates',
-  },
-  createTemplate: {
-    route: `${LEVEL_ONE_ROUTES.templates}/${LEVEL_ONE_ROUTES.createTemplate}`,
-    relativeRoute: `${LEVEL_ONE_ROUTES.createTemplate}`,
-    name: 'Create Template',
-  },
-  createdTemplate: {
-    route: `${LEVEL_ONE_ROUTES.templates}/${LEVEL_ONE_ROUTES.createdTemplate}`,
-    relativeRoute: `${LEVEL_ONE_ROUTES.createdTemplate}`,
-    name: 'Created Template',
   },
 }

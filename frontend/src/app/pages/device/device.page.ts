@@ -11,9 +11,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DeviceCharacteristicComponent } from './components/device-characteristic/device-characteristic.component';
 import { MatDialog } from '@angular/material/dialog';
-import { CrateOrUpdateCharacteristicDialogComponent } from './components/crate-or-update-characteristic-dialog/crate-or-update-characteristic-dialog.component';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
 import { MatButtonModule } from '@angular/material/button';
+import { CreateOrUpdateCharacteristicDialogComponent } from './components/create-or-update-characteristic-dialog/create-or-update-characteristic-dialog.component';
 
 @Component({
   selector: 'app-device',
@@ -55,7 +55,7 @@ export class DevicePage implements OnInit {
     openCreateCharacteristicDialog(): void {
       let emptyCharacteristic=EMPTY_OBJECTS.getEmptyBluetoothCharacteristic();
       emptyCharacteristic.deviceId = this.scanResult()?.device.deviceId;
-      this.dialog.open(CrateOrUpdateCharacteristicDialogComponent, {
+      this.dialog.open(CreateOrUpdateCharacteristicDialogComponent, {
         data: emptyCharacteristic,
       });
     }

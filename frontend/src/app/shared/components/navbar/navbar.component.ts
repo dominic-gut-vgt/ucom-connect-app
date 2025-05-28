@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
   //consts
   protected readonly pages = [
     PAGES.home,
-    PAGES.createdTemplate,
+    PAGES.templates,
     PAGES.info
   ];
   protected readonly icons = [

@@ -20,10 +20,6 @@ export class TemplateService {
   //data
   private templates: Template<UcomConnectSetupTemplateData>[] = [];
 
-  private currentSelectedTemplate: Template<UcomConnectSetupTemplateData> = EMPTY_OBJECTS.getEmptyUcomConnectTemplate();
-  constructor() { }
-
-
   public loadTemplates(): Observable<Template<UcomConnectSetupTemplateData>[]> {
     return new Observable(observer => {
       this.localStorageService.getItem<any[]>(LocalStorageKey.Templates).then(templates => {
@@ -38,15 +34,4 @@ export class TemplateService {
       });
     });
   }
-
-  //setters---------------------------------------------------------------------------
-  setCurrentSelectedTemplate(template: Template<UcomConnectSetupTemplateData>) {
-    this.currentSelectedTemplate = template;
-  }
-
-  //getters---------------------------------------------------------------------------
-  getCurrentSelectedTemplate(): Template<UcomConnectSetupTemplateData> {
-    return JSON.parse(JSON.stringify(this.currentSelectedTemplate));
-  }
-
 }

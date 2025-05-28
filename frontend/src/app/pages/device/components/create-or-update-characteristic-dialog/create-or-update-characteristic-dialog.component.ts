@@ -31,13 +31,13 @@ enum FormGroupKeys {
 
 @Component({
   selector: 'app-crate-or-update-characteristic-dialog',
-  templateUrl: './crate-or-update-characteristic-dialog.component.html',
-  styleUrls: ['./crate-or-update-characteristic-dialog.component.scss'],
+  templateUrl: './create-or-update-characteristic-dialog.component.html',
+  styleUrls: ['./create-or-update-characteristic-dialog.component.scss'],
   imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class CrateOrUpdateCharacteristicDialogComponent implements OnInit {
+export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
   //injections
   readonly dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
   readonly characteristic = inject<BluetoothCharacteristic>(MAT_DIALOG_DATA);
