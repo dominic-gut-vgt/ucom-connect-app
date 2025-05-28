@@ -1,7 +1,13 @@
 <div class="create-or-update-characteristic-dialog p-5">
-  <h1 class="py-5">Create Characteristic</h1>
 
-  <form [formGroup]="characteristicForm" class="form-container w-full" (submit)="saveCharacteristic()">
+  <div class="flex items-center justify-between">
+      <h1 class="py-5">Create Characteristic</h1> 
+      <button mat-flat-button (click)="deleteCharacteristic()" >
+        {{deletePossible()?'Really delete?':'Delete'}}
+      </button>
+  </div>
+
+  <form [formGroup]="characteristicForm" class="form-container w-full" (submit)="saveCharacteristic()" (click)="clearReallyDelete()">
     <mat-form-field class="w-full">
       <mat-label>Title</mat-label>
       <input matInput [formControlName]="FGK.Title" />
@@ -44,7 +50,7 @@
       Read After Every Write
     </mat-checkbox>
 
-    <div formArrayName="infos" class="info-array">
+    <div [formArrayName]="FGK.Infos" class="info-array">
       @for(info of infos.controls; track info){
       <div [formGroupName]="$index" class="info-group mb-4">
         <div class="flex flex-row items-center justify-between mb-2">

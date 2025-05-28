@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactristic-info.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
@@ -24,7 +25,7 @@ enum FormGroupKeys {
   selector: 'app-device-characteristic',
   templateUrl: './device-characteristic.component.html',
   styleUrls: ['./device-characteristic.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule, ValuetoToCharacteristicInfoPipe, MatButtonModule, MatInput, MatLabel, MatFormField]
+  imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule, MatSlideToggleModule, ValuetoToCharacteristicInfoPipe, MatButtonModule, MatInput, MatLabel, MatFormField, MatIconModule]
 })
 export class DeviceCharacteristicComponent {
   //injections

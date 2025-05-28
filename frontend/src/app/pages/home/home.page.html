@@ -10,8 +10,8 @@
     <app-bluetooth-device-list [scanResults]="scanResults()"></app-bluetooth-device-list>
     }@else {
     <div class="bluetooth-disabled-info flex flex-col items-center">
-      <h1 class="pb-3 text-5xl text-gray-500">
-        <fa-icon [icon]="bluetoothIcon"></fa-icon>
+      <h1 class="pb-3 text-gray-500">
+        <fa-icon [icon]="bluetoothIcon" size="2x" ></fa-icon>
       </h1>
       <p class="text-gray-500 text-center">Bluetooth is disabled. Please enable Bluetooth to scan for devices.</p>
     </div>

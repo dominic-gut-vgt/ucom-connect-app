@@ -1,15 +1,13 @@
 import { BluetoothAction } from "../enums/bluetooth-action.enum";
 import { BluetoothDataType } from "../enums/bluetooth-data-type.enum";
 import { BluetoothCharacteristic } from "../interfaces/bluetooth-characteristic";
-import { Template } from "../interfaces/templates/template.interface";
-import { UcomConnectSetupTemplateData } from "../interfaces/templates/ucom-connect-template-data.interface";
-import {v4 as uuid} from 'uuid';
+import { Template, TemplateData } from "../interfaces/templates/template.interface";
 
 class EmptyObjects {
-  getEmptyUcomConnectTemplateData(): UcomConnectSetupTemplateData {
+  getEmptyTemplateData(): TemplateData {
     return JSON.parse(JSON.stringify(UCOM_CONNECT_TEMPLATE_DATA));
   }
-  getEmptyUcomConnectTemplate(): Template<UcomConnectSetupTemplateData> {
+  getEmptyUcomConnectTemplate(): Template {
     return JSON.parse(JSON.stringify(UCOM_CONNECT_TEMPLATE));
   }
   getEmptyBluetoothCharacteristic(): BluetoothCharacteristic {
@@ -35,18 +33,14 @@ const BLUETOOTH_CHARACTERISTIC: BluetoothCharacteristic = {
 }
 
 
-const UCOM_CONNECT_TEMPLATE_DATA: UcomConnectSetupTemplateData = {
-  wifiSSID: '',
-  wifiPassword: '',
-  cloudURI: '',
-  autorestart: false,
-  restart: false,
-  reconnect: false
+const UCOM_CONNECT_TEMPLATE_DATA: TemplateData = {
+  characteristicId: '',
+  writeValue: ''
 };
 
-const UCOM_CONNECT_TEMPLATE: Template<UcomConnectSetupTemplateData> = {
+const UCOM_CONNECT_TEMPLATE: Template = {
   id: '',
   name: '',
   description: '',
-  data: EMPTY_OBJECTS.getEmptyUcomConnectTemplateData()
+  data: []
 };

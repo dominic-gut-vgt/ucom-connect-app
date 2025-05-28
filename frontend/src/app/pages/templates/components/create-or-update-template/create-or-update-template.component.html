@@ -1,3 +1,68 @@
-<p>
-  create-or-update-template works!
-</p>
+<div class="create-or-update-characteristic-dialog p-5">
+
+  <div class="flex items-center justify-between">
+    <h1 class="py-5">Create Template</h1>
+    <button mat-flat-button (click)="deleteTemplate()">
+      {{deletePossible()?'Really delete?':'Delete'}}
+    </button>
+  </div>
+
+  <form [formGroup]="templateForm" class="form-container w-full" (submit)="saveTemplate()"
+    (click)="clearReallyDelete()">
+    <mat-form-field class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput [formControlName]="FGK.Name" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <input matInput [formControlName]="FGK.Description" />
+    </mat-form-field>
+
+
+    <div [formArrayName]="FGK.Data" class="info-array">
+      @for(templateData of templateDataFormArray.controls; track templateData){
+      <div [formGroupName]="$index" class="info-group mb-4">
+        <div class="flex flex-row items-center justify-between mb-2">
+          <h3>Characteristic #{{ $index + 1 }}</h3>
+          <button mat-icon-button color="danger" (click)="removeInfo($index)">
+            <fa-icon [icon]="deleteIcon"></fa-icon>
+          </button>
+        </div>
+        <mat-form-field class="w-full">
+          <mat-label>Bluetooth characteristic</mat-label>
+          <mat-select [formControlName]="FGK.CharacteristicId">
+
+            <mat-select-trigger>
+              {{ (this.templateForm.get(this.FGK.Data)?.value.at($index).characteristicId |
+              getCharacteristicById:allCharacteristics())?.title || 'Select an option' }}
+            </mat-select-trigger>
+
+            @for(characteristic of characteristicsPerDropdown()[$index]; track characteristic.id) {
+            <mat-option [value]="characteristic.id">
+              <div class="p-3">
+                <h2>{{characteristic.title}}</h2>
+                <p>{{characteristic.description}}</p>
+              </div>
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Predefined write value</mat-label>
+          <input matInput [formControlName]="FGK.WriteValue" />
+        </mat-form-field>
+      </div>
+      }
+    </div>
+
+    <div class="flex w-full gap-2">
+      <button class="w-1/2" mat-button color="primary" type="button" (click)="addTemplateData()">Add template
+        data</button>
+      <button class="w-1/2" mat-raised-button color="accent" type="submit"
+        [disabled]="templateForm.invalid">Submit</button>
+    </div>
+
+  </form>
+</div>

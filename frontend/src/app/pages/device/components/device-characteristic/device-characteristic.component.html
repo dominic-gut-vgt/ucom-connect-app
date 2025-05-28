@@ -3,15 +3,15 @@
   <div class="card-header">
     <div class="infos">
       <div class="flex items-center">
+        <h3 class="pe-3">{{characteristic().title}}</h3>
+        @if(characteristic().infos.length>0){
+        <button class="me-3" mat-icon-button (click)="openCharacteristicInfosDialog()">
+          <fa-icon [icon]="infoIcon"></fa-icon>
+        </button>
+        }
         @if(isSelfCreated()){
         <button mat-icon-button (click)="editCharacteristic()">
           <fa-icon [icon]="editIcon"></fa-icon>
-        </button>
-        }
-        <h3>{{characteristic().title}}</h3>
-        @if(characteristic().infos.length>0){
-        <button mat-icon-button (click)="openCharacteristicInfosDialog()">
-          <fa-icon [icon]="infoIcon"></fa-icon>
         </button>
         }
       </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
@@ -60,9 +60,8 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
   //form
   protected characteristicForm!: FormGroup;
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+  //flags
+  protected deletePossible = signal(false);
 
   ngOnInit() {
     this.createCharacteristicForm(this.characteristic);
@@ -73,7 +72,52 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
     })
   }
 
-  createCharacteristicInfoForm(info?: BluetoothCharacteristicInfo): FormGroup {
+  protected saveCharacteristic() {
+    if (this.characteristicForm.valid) {
+      const characteristic = this.getCharacteristicFromForm();
+      this.deletePossible.set(false);
+
+
+      console.log(characteristic);
+      if (!this.characteristics.find(c => c.id === characteristic.id)) {
+        this.characteristics.push(characteristic);
+      } else {
+        this.characteristics = this.characteristics.map(c => c.id === characteristic.id ? characteristic : c);
+        console.log(this.characteristics);
+      }
+
+      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
+        this.dialogRef.close(characteristic);
+      });
+    }
+  }
+
+
+  protected deleteCharacteristic(): void {
+
+    if (this.deletePossible()) {
+      const characteristic = this.getCharacteristicFromForm();
+
+      this.characteristics = this.characteristics.filter(c => c.id !== characteristic.id);
+
+      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
+        this.deletePossible.set(false);
+        this.dialogRef.close(characteristic);
+      });
+    } else {
+      this.deletePossible.set(true);
+    }
+  }
+
+  protected clearReallyDelete(): void {
+    this.deletePossible.set(false);
+  }
+
+
+  //formgroup---------------------------------------------------------------
+
+
+  private createCharacteristicInfoForm(info?: BluetoothCharacteristicInfo): FormGroup {
     return this.fb.group({
       [this.FGK.Title]: [info?.title || '', Validators.required],
       [this.FGK.Description]: [info?.description || '', Validators.required],
@@ -81,7 +125,7 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
     });
   }
 
-  createCharacteristicForm(characteristic: BluetoothCharacteristic): void {
+  private createCharacteristicForm(characteristic: BluetoothCharacteristic): void {
     this.characteristicForm = this.fb.group({
       [this.FGK.Id]: [characteristic?.id || uuid(), Validators.required],
       [this.FGK.Title]: [characteristic?.title || '', Validators.required],
@@ -99,27 +143,12 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
     });
   }
 
-  protected saveCharacteristic() {
-    if (this.characteristicForm.valid) {
-      const characteristic: BluetoothCharacteristic = {
-        ...this.characteristicForm.value,
-        [this.FGK.Infos]: this.infos.value as BluetoothCharacteristicInfo[],
-      };
-
-      console.log(characteristic);
-      if (!this.characteristics.find(c => c.id === characteristic.id)) {
-        this.characteristics.push(characteristic);
-      } else {
-       this.characteristics= this.characteristics.map(c => c.id === characteristic.id ? characteristic : c);
-        console.log(this.characteristics);
-      }
-
-      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
-        this.dialogRef.close(characteristic);
-      });
-    }
+  private getCharacteristicFromForm(): BluetoothCharacteristic {
+    return {
+      ...this.characteristicForm.value,
+      [this.FGK.Infos]: this.infos.value as BluetoothCharacteristicInfo[],
+    } as BluetoothCharacteristic;
   }
-
 
 
   protected get infos(): FormArray {
@@ -133,8 +162,5 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
   protected removeInfo(index: number) {
     this.infos.removeAt(index);
   }
-
-
-
 
 }
