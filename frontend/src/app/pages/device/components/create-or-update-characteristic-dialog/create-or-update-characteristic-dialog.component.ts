@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 import { v4 as uuid } from 'uuid';
+import { CharacteristicsService } from 'src/app/services/characteristics.service';
 
 enum FormGroupKeys {
   Id = 'id',
@@ -47,6 +48,7 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
   private characteristic = inject<BluetoothCharacteristic>(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
   private localStorageService = inject(LocalStorageService);
+  private characteristicsService = inject(CharacteristicsService);
 
   //consts
   protected readonly FGK = FormGroupKeys;
@@ -77,16 +79,7 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
       const characteristic = this.getCharacteristicFromForm();
       this.deletePossible.set(false);
 
-
-      console.log(characteristic);
-      if (!this.characteristics.find(c => c.id === characteristic.id)) {
-        this.characteristics.push(characteristic);
-      } else {
-        this.characteristics = this.characteristics.map(c => c.id === characteristic.id ? characteristic : c);
-        console.log(this.characteristics);
-      }
-
-      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
+      this.characteristicsService.saveCharacteristic(characteristic).then(() => {
         this.dialogRef.close(characteristic);
       });
     }
@@ -97,10 +90,7 @@ export class CreateOrUpdateCharacteristicDialogComponent implements OnInit {
 
     if (this.deletePossible()) {
       const characteristic = this.getCharacteristicFromForm();
-
-      this.characteristics = this.characteristics.filter(c => c.id !== characteristic.id);
-
-      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.characteristics).then(() => {
+      this.characteristicsService.deleteCharacteristic(characteristic).then(() => {
         this.deletePossible.set(false);
         this.dialogRef.close(characteristic);
       });

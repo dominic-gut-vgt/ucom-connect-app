@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CreateOrUpdateCharacteristicDialogComponent } from './components/create-or-update-characteristic-dialog/create-or-update-characteristic-dialog.component';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
+import { CharacteristicsService } from 'src/app/services/characteristics.service';
 
 @Component({
   selector: 'app-device',
@@ -27,7 +28,7 @@ import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 export class DevicePage implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
-  private localStorageService = inject(LocalStorageService);
+  private characteristicsService = inject(CharacteristicsService);
 
   //consts
   protected readonly ucomConnectCharacteristics: BluetoothCharacteristic[] = JSON.parse(JSON.stringify(UCOM_CONNECT_CHARACTERISTICS));
@@ -39,28 +40,17 @@ export class DevicePage implements OnInit {
 
   //data
   protected scanResult = signal<ScanResult | undefined>(undefined);
-  protected selfCreatedCharacteristics = signal<BluetoothCharacteristic[]>([]);
-
+  protected selfCreatedCharacteristics = this.characteristicsService.selfCreatedCharacteristicsReadonly;
 
   ngOnInit() {
     const nav = this.router.getCurrentNavigation();
     this.scanResult.set(nav?.extras?.state?.[ROUTE_PARAM_IDS.scanResult]);
-    this.loadSelfCreatedCharacteristics();
   }
 
   onCharacteristicWritten(): void {
     this.characteristicItems().forEach(item => {
       if (item.characteristic().readAfterEveryWrite) {
         item.readCharacteristic();
-      }
-    });
-  }
-
-  private loadSelfCreatedCharacteristics(): void {
-    this.localStorageService.getItem<BluetoothCharacteristic[]>(LocalStorageKey.Characteristics).then((characteristics) => {
-      console.log(characteristics);
-      if (characteristics) {
-        this.selfCreatedCharacteristics.set(characteristics);
       }
     });
   }
@@ -73,10 +63,6 @@ export class DevicePage implements OnInit {
     }
     const dialogRef = this.dialog.open(CreateOrUpdateCharacteristicDialogComponent, {
       data: characteristic,
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      this.loadSelfCreatedCharacteristics();
     });
   }
 

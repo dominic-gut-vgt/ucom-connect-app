@@ -17,10 +17,13 @@ import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-cha
 import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
 import { v4 as uuid } from 'uuid';
 import { GetCharacteristicByIdPipe } from '../../pipes/get-characteristic-by-id.pipe';
+import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
+import { CharacteristicsService } from 'src/app/services/characteristics.service';
+import { TemplatesService } from 'src/app/services/templates.service';
 
 enum FormGroupKeys {
   Id = 'id',
-  Name = 'title',
+  Name = 'name',
   Description = 'description',
   Data = 'data',
   CharacteristicId = 'characteristicId',
@@ -40,21 +43,21 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
   private template = inject<Template>(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
-  private localStorageService = inject(LocalStorageService);
-
+  private characteristicsService = inject(CharacteristicsService);
+  private templatesService = inject(TemplatesService);
   //consts
   protected readonly FGK = FormGroupKeys;
   protected readonly deleteIcon = faTrash;
 
   //data
   private templates: Template[] = [];
-  private predefinedBluetoothCharacteristics = signal(UCOM_CONNECT_CHARACTERISTICS);
-  private selfCreatedCharacteristics = signal<BluetoothCharacteristic[]>([]);
+
   private templateData = signal<TemplateData[]>([]);
-  protected allCharacteristics = computed(() => {
-    return this.predefinedBluetoothCharacteristics().concat(this.selfCreatedCharacteristics());
-  });
   protected characteristicsPerDropdown = signal<BluetoothCharacteristic[][]>([]);
+  protected allCharacteristics = this.characteristicsService.allCharacteristics;
+  protected selectableCharacteristics = computed(() => {
+    return this.allCharacteristics().filter(c => (c.bluetoothAction === BluetoothAction.ReadWrite || c.bluetoothAction === BluetoothAction.Write));
+  });
 
   //form
   protected templateForm!: FormGroup;
@@ -64,17 +67,6 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
 
   ngOnInit() {
     this.createTemplateForm(this.template);
-    this.localStorageService.getItem<Template[]>(LocalStorageKey.Templates).then((templates) => {
-      if (templates) {
-        this.templates = templates;
-      }
-    });
-
-    this.localStorageService.getItem<BluetoothCharacteristic[]>(LocalStorageKey.Characteristics).then((characteristics) => {
-      if (characteristics) {
-        this.selfCreatedCharacteristics.set(characteristics);
-      }
-    });
   }
 
   protected saveTemplate() {
@@ -82,13 +74,8 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
       const template = this.getTemplateFromForm();
       this.deletePossible.set(false);
 
-      if (!this.templates.find(t => t.id === template.id)) {
-        this.templates.push(template);
-      } else {
-        this.templates = this.templates.map(c => c.id === template.id ? template : c);
-      }
 
-      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.templates).then(() => {
+      this.templatesService.saveTemplate(template).then(() => {
         this.dialogRef.close(template);
       });
     }
@@ -97,13 +84,10 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   protected deleteTemplate(): void {
 
     if (this.deletePossible()) {
-      const characteristic = this.getTemplateFromForm();
-
-      this.templates = this.templates.filter(c => c.id !== characteristic.id);
-
-      this.localStorageService.setItem(LocalStorageKey.Characteristics, this.templates).then(() => {
+      const template = this.getTemplateFromForm();
+      this.templatesService.deleteTemplate(template).then(() => {
         this.deletePossible.set(false);
-        this.dialogRef.close(characteristic);
+        this.dialogRef.close(template);
       });
     } else {
       this.deletePossible.set(true);
@@ -133,8 +117,6 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
         (template?.data || []).map(data => this.createTemplateDataForm(data))
       ),
     });
-
-   // this.addTemplateData();
 
     this.subscribeToFormChanges();
   }

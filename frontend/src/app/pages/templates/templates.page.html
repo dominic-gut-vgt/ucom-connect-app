@@ -1,17 +1,28 @@
 <section class="page-container">
   <div class="width-wrapper flex flex-col items-center justify-center">
     <button mat-flat-button class="create-template-btn w-full mb-4" (click)="createTemplate()">
-      <fa-icon [icon]="addIcon" ></fa-icon> Create new template
+      <fa-icon [icon]="addIcon"></fa-icon> Create new template
     </button>
     @if(templates().length> 0){
-    <ul>
+    <ul class="w-full">
       @for(template of templates();track template.id){
-      <li class="template-item">
+      <li class="card-std w-full flex items-center justify-between">
         <div>
           <h2>{{template.name}}</h2>
           <p>{{template.description}}</p>
+          @if(template.data.length){
+          <ul class="mt-3">
+            @for(data of template.data;track data){
+            <li>
+              
+            </li>
+            }
+          </ul>
+          }@else {
+            <p class="text-gray-500">No characteristics configured</p>
+          }
         </div>
-        <button class="edit-btn btn-icon">
+        <button mat-icon-button class="edit-btn" (click)="editTemplate(template)">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </li>
