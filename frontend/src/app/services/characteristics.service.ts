@@ -27,7 +27,6 @@ export class CharacteristicsService {
 
   private loadSelfCreatedCharacteristics(): void {
     this.localStorageService.getItem<BluetoothCharacteristic[]>(LocalStorageKey.Characteristics).then((characteristics) => {
-      console.log(characteristics);
       if (characteristics) {
         this.selfCreatedCharacteristics.set(characteristics);
       }
@@ -44,7 +43,6 @@ export class CharacteristicsService {
       });
     } else {
       this.selfCreatedCharacteristics.set(this.selfCreatedCharacteristics().map(c => c.id === characteristic.id ? characteristic : c));
-      console.log(this.selfCreatedCharacteristics);
     }
 
     return this.localStorageService.setItem(LocalStorageKey.Characteristics, this.selfCreatedCharacteristics())
@@ -53,7 +51,7 @@ export class CharacteristicsService {
   public deleteCharacteristic(characteristic: BluetoothCharacteristic): Promise<void> {
     this.selfCreatedCharacteristics.set(this.selfCreatedCharacteristics().filter(c => c.id !== characteristic.id));
 
-  return  this.localStorageService.setItem(LocalStorageKey.Characteristics, this.selfCreatedCharacteristics())
+    return this.localStorageService.setItem(LocalStorageKey.Characteristics, this.selfCreatedCharacteristics())
   }
 }
 

@@ -10,9 +10,6 @@ import { MatSelectModule, MatSelectTrigger } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { UCOM_CONNECT_CHARACTERISTICS } from 'src/app/shared/consts/ucom-connect-characteristics';
-import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
 import { v4 as uuid } from 'uuid';
@@ -20,6 +17,8 @@ import { GetCharacteristicByIdPipe } from '../../pipes/get-characteristic-by-id.
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { CharacteristicsService } from 'src/app/services/characteristics.service';
 import { TemplatesService } from 'src/app/services/templates.service';
+import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 enum FormGroupKeys {
   Id = 'id',
@@ -30,12 +29,11 @@ enum FormGroupKeys {
   WriteValue = 'writeValue',
 }
 
-
 @Component({
   selector: 'app-create-or-update-template',
   templateUrl: './create-or-update-template.component.html',
   styleUrls: ['./create-or-update-template.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, GetCharacteristicByIdPipe, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule, MatSelectTrigger],
+  imports: [CommonModule, FontAwesomeModule, GetCharacteristicByIdPipe, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule, MatSelectTrigger,MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateOrUpdateTemplateComponent implements OnInit {
@@ -45,16 +43,18 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private characteristicsService = inject(CharacteristicsService);
   private templatesService = inject(TemplatesService);
+
   //consts
   protected readonly FGK = FormGroupKeys;
   protected readonly deleteIcon = faTrash;
+  protected readonly bluetoothDataType = BluetoothDataType;
 
   //data
   private templates: Template[] = [];
 
   private templateData = signal<TemplateData[]>([]);
   protected characteristicsPerDropdown = signal<BluetoothCharacteristic[][]>([]);
-  protected allCharacteristics = this.characteristicsService.allCharacteristics;
+  private allCharacteristics = this.characteristicsService.allCharacteristics;
   protected selectableCharacteristics = computed(() => {
     return this.allCharacteristics().filter(c => (c.bluetoothAction === BluetoothAction.ReadWrite || c.bluetoothAction === BluetoothAction.Write));
   });
@@ -67,6 +67,7 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
 
   ngOnInit() {
     this.createTemplateForm(this.template);
+    console.log(this.template);
   }
 
   protected saveTemplate() {
@@ -118,6 +119,8 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
       ),
     });
 
+    this.templateData.set(this.templateDataFormArray.value as TemplateData[]);
+    this.calcCharacteristicsPerDropdown();
     this.subscribeToFormChanges();
   }
 
@@ -129,18 +132,17 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   }
 
   private calcCharacteristicsPerDropdown(): void {
-    const filteredCharacteristics = this.allCharacteristics().filter(c => !this.templateData().map(t => t.characteristicId).includes(c.id))
+    const filteredCharacteristics = this.selectableCharacteristics().filter(c => !this.templateData().map(t => t.characteristicId).includes(c.id))
     const updatedCharacteristicsPerDropdown: BluetoothCharacteristic[][] = [];
 
     this.templateData().forEach((templateData, i) => {
-      const selectedCharacteristic = this.allCharacteristics().find(c => c.id === templateData.characteristicId);
+      const selectedCharacteristic = this.selectableCharacteristics().find(c => c.id === templateData.characteristicId);
       updatedCharacteristicsPerDropdown[i] = JSON.parse(JSON.stringify(filteredCharacteristics));
       if (selectedCharacteristic) {
         updatedCharacteristicsPerDropdown[i].push(selectedCharacteristic);
       }
     });
     this.characteristicsPerDropdown.set(updatedCharacteristicsPerDropdown);
-
   }
 
   private getTemplateFromForm(): Template {
@@ -149,7 +151,6 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
       [this.FGK.Data]: this.templateDataFormArray.value as TemplateData[],
     } as Template;
   }
-
 
   protected get templateDataFormArray(): FormArray {
     return this.templateForm.get(this.FGK.Data) as FormArray;

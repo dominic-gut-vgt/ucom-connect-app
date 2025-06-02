@@ -58,7 +58,6 @@ export class HomePage {
     this.bluetoothService.bluetoothEnabledUpdated.subscribe((enabled) => {
       this.bluetoothEnabled.set(enabled);
       if (enabled) {
-        console.log(enabled);
         if (!this.scannedOnce) {
           this.scanForDevices();
         }

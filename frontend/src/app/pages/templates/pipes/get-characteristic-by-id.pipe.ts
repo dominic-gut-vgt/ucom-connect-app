@@ -11,6 +11,7 @@ export class GetCharacteristicByIdPipe implements PipeTransform {
     if (!characteristicId || !allCharacteristics) {
       return undefined;
     }
+
     const foundCharacteristic = allCharacteristics.find(c => c.id === characteristicId);
     return foundCharacteristic;
   }

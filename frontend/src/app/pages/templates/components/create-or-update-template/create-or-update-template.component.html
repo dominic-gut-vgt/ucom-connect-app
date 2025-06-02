@@ -22,20 +22,23 @@
 
     <div [formArrayName]="FGK.Data" class="info-array">
       @for(templateData of templateDataFormArray.controls; track templateData){
-      <div [formGroupName]="$index" class="info-group mb-4">
+      <div [formGroupName]="$index" class="info-group mb-5 pb-5">
         <div class="flex flex-row items-center justify-between mb-2">
           <h3>Characteristic #{{ $index + 1 }}</h3>
           <button mat-icon-button color="danger" (click)="removeInfo($index)">
             <fa-icon [icon]="deleteIcon"></fa-icon>
           </button>
         </div>
+
+        @let characteristicOfCurrentItem=(this.templateForm.get(this.FGK.Data)?.value.at($index).characteristicId |
+        getCharacteristicById:selectableCharacteristics());
+        <!-- Characteristic Dropdown -->
         <mat-form-field class="w-full">
           <mat-label>Bluetooth characteristic</mat-label>
           <mat-select [formControlName]="FGK.CharacteristicId">
 
             <mat-select-trigger>
-              {{ (this.templateForm.get(this.FGK.Data)?.value.at($index).characteristicId |
-              getCharacteristicById:allCharacteristics())?.title || 'Select an option' }}
+              {{ characteristicOfCurrentItem?.title || 'Select an option' }}
             </mat-select-trigger>
 
             @for(characteristic of characteristicsPerDropdown()[$index]; track characteristic.id) {
@@ -49,17 +52,37 @@
           </mat-select>
         </mat-form-field>
 
+        <!-- Characteristic write value -->
+        @switch (characteristicOfCurrentItem?.dataType) {
+        @case (bluetoothDataType.String) {
         <mat-form-field class="w-full">
           <mat-label>Predefined write value</mat-label>
-          <input matInput [formControlName]="FGK.WriteValue" />
+          <input matInput type="text" [formControlName]="FGK.WriteValue" />
         </mat-form-field>
+        }
+        @case (bluetoothDataType.Number || bluetoothDataType.Int16 || bluetoothDataType.Int32 ||
+        bluetoothDataType.Uint8) {
+        <mat-form-field class="w-full">
+          <mat-label>Predefined write value</mat-label>
+          <input matInput type="number" [formControlName]="FGK.WriteValue" />
+        </mat-form-field>
+        }
+        @case(bluetoothDataType.Boolean){
+        <mat-slide-toggle class="w-full"
+          [formControlName]="FGK.WriteValue">Predefined write value</mat-slide-toggle>
+        }
+        }
+
       </div>
       }
     </div>
 
     <div class="flex w-full gap-2">
-      <button class="w-1/2" mat-button color="primary" type="button" (click)="addTemplateData()">Add template
-        data</button>
+      <button class="w-1/2" mat-button color="primary" type="button"
+        [disabled]="characteristicsPerDropdown().length===selectableCharacteristics().length"
+        (click)="addTemplateData()">
+        Add template data
+      </button>
       <button class="w-1/2" mat-raised-button color="accent" type="submit"
         [disabled]="templateForm.invalid">Submit</button>
     </div>

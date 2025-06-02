@@ -118,7 +118,7 @@ export class DeviceCharacteristicComponent {
           this.isReading.set(false);
         },
         error: (error) => {
-          console.log(error);
+          console.error(error);
           this.isReading.set(false);
         }
       });
@@ -136,7 +136,7 @@ export class DeviceCharacteristicComponent {
           this.writtenEvent.emit();
         },
         error: (error) => {
-          console.log(error);
+          console.error(error);
           this.isWriting.set(false);
         }
       });
