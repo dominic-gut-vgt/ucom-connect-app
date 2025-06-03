@@ -65,7 +65,6 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
 
   ngOnInit() {
     this.createTemplateForm(this.template);
-    console.log(this.template);
   }
 
   protected saveTemplate() {

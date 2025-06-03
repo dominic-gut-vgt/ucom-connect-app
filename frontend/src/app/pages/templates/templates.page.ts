@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -9,14 +9,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
 import { CreateOrUpdateTemplateComponent } from './components/create-or-update-template/create-or-update-template.component';
 import { TemplatesService } from 'src/app/services/templates.service';
-import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
 
 @Component({
   selector: 'app-templates',
   templateUrl: './templates.page.html',
   styleUrls: ['./templates.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, MatButtonModule, GetCharacteristicByIdPipe]
+  imports: [CommonModule, FormsModule, FontAwesomeModule, MatButtonModule]
 })
 export class TemplatesPage {
   //injections
@@ -35,7 +34,7 @@ export class TemplatesPage {
     if (!template) {
       template = EMPTY_OBJECTS.getEmptyUcomConnectTemplate();
     }
-    const dialogRef = this.dialog.open(CreateOrUpdateTemplateComponent, {
+    this.dialog.open(CreateOrUpdateTemplateComponent, {
       data: template,
     });
   }

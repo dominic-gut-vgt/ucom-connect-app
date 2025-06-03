@@ -46,7 +46,6 @@ enum FormGroupKeys {
     MatOption,
     MatChipsModule,
     //pipes
-    FindTemplateByIdPipe,
     GetCharacteristicByIdPipe,
   ]
 })
