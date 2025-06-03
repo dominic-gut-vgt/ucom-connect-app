@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -33,7 +33,7 @@ enum FormGroupKeys {
   selector: 'app-create-or-update-template',
   templateUrl: './create-or-update-template.component.html',
   styleUrls: ['./create-or-update-template.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, GetCharacteristicByIdPipe, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule, MatSelectTrigger,MatSlideToggleModule],
+  imports: [CommonModule, FontAwesomeModule, GetCharacteristicByIdPipe, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule, MatSelectTrigger, MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateOrUpdateTemplateComponent implements OnInit {
@@ -50,11 +50,9 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   protected readonly bluetoothDataType = BluetoothDataType;
 
   //data
-  private templates: Template[] = [];
-
   private templateData = signal<TemplateData[]>([]);
-  protected characteristicsPerDropdown = signal<BluetoothCharacteristic[][]>([]);
   private allCharacteristics = this.characteristicsService.allCharacteristics;
+  protected characteristicsPerDropdown = signal<BluetoothCharacteristic[][]>([]);
   protected selectableCharacteristics = computed(() => {
     return this.allCharacteristics().filter(c => (c.bluetoothAction === BluetoothAction.ReadWrite || c.bluetoothAction === BluetoothAction.Write));
   });
@@ -83,7 +81,6 @@ export class CreateOrUpdateTemplateComponent implements OnInit {
   }
 
   protected deleteTemplate(): void {
-
     if (this.deletePossible()) {
       const template = this.getTemplateFromForm();
       this.templatesService.deleteTemplate(template).then(() => {

@@ -1,0 +1,1 @@
+export type bluetoothWriteValue = string | number | boolean | undefined;

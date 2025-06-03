@@ -3,6 +3,7 @@ import { BleClient, numberToUUID, ScanResult, hexStringToDataView, } from '@capa
 import { BluetoothDataType } from '../shared/enums/bluetooth-data-type.enum';
 import { Observable } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
+import { bluetoothWriteValue } from '../shared/types/bluetooth.type';
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +79,7 @@ export class BluetoothService {
       case BluetoothDataType.String:
         const byteArray = new Uint8Array(dataView.buffer);
         const decoder = new TextDecoder('utf-8');
-        const rawString= decoder.decode(byteArray) as string;
+        const rawString = decoder.decode(byteArray) as string;
         return rawString.replace(/\0/g, '') as T; // remove null characters
 
       case BluetoothDataType.Number:
@@ -90,7 +91,7 @@ export class BluetoothService {
     }
   }
 
-  public writeCharacteristic(deviceId: string, service: string, characteristic: string, value: string, bluetoothDatatype: BluetoothDataType): Observable<boolean> {
+  public writeCharacteristic(deviceId: string, service: string, characteristic: string, value: bluetoothWriteValue, bluetoothDatatype: BluetoothDataType): Observable<boolean> {
     return new Observable<boolean>(observer => {
       (async () => {
         try {
@@ -99,7 +100,7 @@ export class BluetoothService {
 
           let valueAsDataView: DataView;
           switch (bluetoothDatatype) {
-            case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value)); break;
+            case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value as string)); break;
             case BluetoothDataType.Boolean:
               const boolBuffer = new ArrayBuffer(1);
               new DataView(boolBuffer).setUint8(0, value ? 1 : 0);
@@ -108,17 +109,17 @@ export class BluetoothService {
 
             case BluetoothDataType.Uint8:
               const uint8Buffer = new ArrayBuffer(1);
-              new DataView(uint8Buffer).setUint8(0, parseInt(value, 10));
+              new DataView(uint8Buffer).setUint8(0, value as number);
               valueAsDataView = new DataView(uint8Buffer);
               break;
 
             case BluetoothDataType.Int16:
               const int16Buffer = new ArrayBuffer(2);
-              new DataView(int16Buffer).setInt16(0, parseInt(value, 10), true); // littleEndian = true
+              new DataView(int16Buffer).setInt16(0, value as number, true); // littleEndian = true
               valueAsDataView = new DataView(int16Buffer);
               break;
 
-            default: valueAsDataView = hexStringToDataView(this.stringToHex(value))
+            default: valueAsDataView = hexStringToDataView(this.stringToHex(value as string))
           }
 
           await BleClient.write(deviceId, service, characteristic, valueAsDataView);

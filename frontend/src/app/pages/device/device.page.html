@@ -6,13 +6,39 @@
           [icon]="addIcon"></fa-icon> characteristic </button>
     </div>
 
+    <!-- Templates Dropdown -->
+    @if(templates().length>0){
+    <form [formGroup]="templatesForm" class="form-container w-full">
+      <mat-form-field class="w-full">
+        <mat-label>Select a template</mat-label>
+        <mat-select [formControlName]="FGK.Template">
+
+
+          <mat-select-trigger>
+            {{selectedTemplate()?selectedTemplate()?.name:'Select a template'}}
+          </mat-select-trigger>
+
+          @for(template of templates(); track template.id) {
+          <mat-option [value]="template.id">
+            <div class="p-3">
+              <h2>{{template.name}}</h2>
+              <p>{{template.description}}</p>
+            </div>
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+    }
+
+
     <!-- main characteristics -->
     <div class="pb-5">
       <ul>
         @for(characteristic of ucomConnectCharacteristics;track characteristic){
         <li class="card-std">
-          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic" [isSelfCreated]="false"
-            (writtenEvent)="onCharacteristicWritten()">
+          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic"
+            [isSelfCreated]="false" (writtenEvent)="onCharacteristicWritten()">
           </app-device-characteristic>
         </li>
         }
@@ -35,8 +61,9 @@
       <ul>
         @for(characteristic of selfCreatedCharacteristics();track characteristic){
         <li class="card-std">
-          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic" [isSelfCreated]="true"
-            (writtenEvent)="onCharacteristicWritten()" (editCharacteristicEvent)="openEditCharacteristicDialog(characteristic)">
+          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic"
+            [isSelfCreated]="true" (writtenEvent)="onCharacteristicWritten()"
+            (editCharacteristicEvent)="openEditCharacteristicDialog(characteristic)">
           </app-device-characteristic>
         </li>
         }

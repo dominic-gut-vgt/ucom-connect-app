@@ -14,6 +14,7 @@ import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactris
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { bluetoothWriteValue } from 'src/app/shared/types/bluetooth.type';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
@@ -147,11 +148,30 @@ export class DeviceCharacteristicComponent {
     this.editCharacteristicEvent.emit();
   }
 
-  private getWriteValue(): any {
+  private getWriteValue(): bluetoothWriteValue {
     switch (this.characteristic().dataType) {
-      case BluetoothDataType.Boolean: return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
-      case BluetoothDataType.String: return this.characteristicValueForm.get(this.FGK.StringValue)?.value;
-      case BluetoothDataType.Number: return this.characteristicValueForm.get(this.FGK.NumberValue)?.value;
+      case BluetoothDataType.Boolean:
+        return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
+      case BluetoothDataType.String:
+        return this.characteristicValueForm.get(this.FGK.StringValue)?.value;
+      case BluetoothDataType.Number:
+      case BluetoothDataType.Uint8:
+      case BluetoothDataType.Int16:
+      case BluetoothDataType.Int32:
+        return this.characteristicValueForm.get(this.FGK.NumberValue)?.value;
+      default:
+        return '';
+    }
+  }
+
+  public setWriteValue(value: bluetoothWriteValue, dataType: BluetoothDataType) {
+    switch (dataType) {
+      case BluetoothDataType.Boolean: return this.characteristicValueForm.get(this.FGK.BooleanValue)?.setValue(value);
+      case BluetoothDataType.String: return this.characteristicValueForm.get(this.FGK.StringValue)?.setValue(value);
+      case BluetoothDataType.Number:
+      case BluetoothDataType.Uint8:
+      case BluetoothDataType.Int16:
+      case BluetoothDataType.Int32: return this.characteristicValueForm.get(this.FGK.NumberValue)?.setValue(value);
       default: ''
     }
   }
