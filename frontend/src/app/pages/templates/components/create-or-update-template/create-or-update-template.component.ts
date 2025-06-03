@@ -13,12 +13,12 @@ import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/compone
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
 import { v4 as uuid } from 'uuid';
-import { GetCharacteristicByIdPipe } from '../../pipes/get-characteristic-by-id.pipe';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { CharacteristicsService } from 'src/app/services/characteristics.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
 
 enum FormGroupKeys {
   Id = 'id',

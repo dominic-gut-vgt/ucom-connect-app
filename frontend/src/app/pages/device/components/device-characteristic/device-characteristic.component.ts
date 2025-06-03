@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, model, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBook, faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
@@ -58,6 +58,14 @@ export class DeviceCharacteristicComponent {
   protected isWriting = signal<boolean>(false);
   protected updated = signal<boolean>(false);
 
+  //derived flags
+  protected characteristicIsWritable = computed(() => {
+    return this.characteristic().bluetoothAction === BluetoothAction.ReadWrite || this.characteristic().bluetoothAction === BluetoothAction.Write
+  });
+  protected characteristicIsReadable = computed(() => {
+    return this.characteristic().bluetoothAction === BluetoothAction.ReadWrite || this.characteristic().bluetoothAction === BluetoothAction.Read
+  });
+
   //form
   protected characteristicValueForm!: FormGroup;
 
@@ -87,7 +95,7 @@ export class DeviceCharacteristicComponent {
 
   //read & write ------------------------------------------------------------
   public readCharacteristic(): void {
-    if (!this.isReading()) {
+    if (!this.isReading() && this.characteristicIsReadable()) {
       this.isReading.set(true);
       this.bluetoothService.readCharacteristic(this.deviceId() ?? '', this.characteristic().serviceUUID, this.characteristic().uuid, this.characteristic().dataType).subscribe({
         next: (value) => {
@@ -126,8 +134,8 @@ export class DeviceCharacteristicComponent {
     }
   }
 
-  protected writeCharacteristic(): void {
-    if (!this.isWriting()) {
+  public writeCharacteristic(): void {
+    if (!this.isWriting() && this.characteristicIsWritable()) {
       const value = this.getWriteValue();
       this.isWriting.set(true);
       this.bluetoothService.writeCharacteristic(this.deviceId() ?? '', this.characteristic().serviceUUID, this.characteristic().uuid, value, this.characteristic().dataType).subscribe({

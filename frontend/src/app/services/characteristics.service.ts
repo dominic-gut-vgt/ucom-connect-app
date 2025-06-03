@@ -18,7 +18,6 @@ export class CharacteristicsService {
 
   //events
   public allCharacteristics = computed(() => {
-    console.log(this.selfCreatedCharacteristics());
     return this.predefinedBluetoothCharacteristics().concat(this.selfCreatedCharacteristics());
   })
 

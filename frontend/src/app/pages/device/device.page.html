@@ -23,12 +23,25 @@
             <div class="p-3">
               <h2>{{template.name}}</h2>
               <p>{{template.description}}</p>
+              <mat-chip-set class>
+                @for(data of template.data;track data.characteristicId){
+                @let characteristicOfCurrentItem=data.characteristicId|getCharacteristicById:allCharacteristics();
+                <mat-chip>{{characteristicOfCurrentItem?.title}}</mat-chip>
+                }
+              </mat-chip-set>
+
             </div>
           </mat-option>
           }
         </mat-select>
       </mat-form-field>
     </form>
+    }
+
+    @if(selectedTemplate()){
+    <button mat-flat-button class="mt-5 w-full" (click)="writeAll()">
+      Write all <fa-icon class="ms-1" [icon]="writeAllIcon"></fa-icon>
+    </button>
     }
 
 

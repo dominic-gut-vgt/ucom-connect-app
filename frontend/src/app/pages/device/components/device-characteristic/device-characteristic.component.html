@@ -15,8 +15,7 @@
         </button>
         }
       </div>
-      @if(characteristic().bluetoothAction===bluetoothAction.Read
-      ||characteristic().bluetoothAction===bluetoothAction.ReadWrite){
+      @if(characteristicIsReadable()){
 
       <!-- Value -->
       <div class="value-container">
@@ -53,16 +52,14 @@
       }
       }
     </div>
-    @if(characteristic().bluetoothAction===bluetoothAction.Read
-    ||characteristic().bluetoothAction===bluetoothAction.ReadWrite ){
+    @if(characteristicIsReadable() ){
     <button mat-icon-button [ngClass]="isReading()?'read-btn is-reading':'read-btn'" (click)="readCharacteristic()">
       <fa-icon [icon]="readIcon"></fa-icon>
     </button>
     }
   </div>
 
-  @if(characteristic().bluetoothAction===bluetoothAction.Write
-  ||characteristic().bluetoothAction===bluetoothAction.ReadWrite ){
+  @if(characteristicIsWritable()){
   <div class="input-container flex">
     <div class="input-wrapper w-full mt-5">
       <form [formGroup]="characteristicValueForm">

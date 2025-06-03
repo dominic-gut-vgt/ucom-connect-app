@@ -8,10 +8,8 @@ import { Template } from 'src/app/shared/interfaces/templates/template.interface
 import { MatDialog } from '@angular/material/dialog';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
 import { CreateOrUpdateTemplateComponent } from './components/create-or-update-template/create-or-update-template.component';
-import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { GetCharacteristicByIdPipe } from './pipes/get-characteristic-by-id.pipe';
 import { TemplatesService } from 'src/app/services/templates.service';
+import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
 
 @Component({
   selector: 'app-templates',
@@ -20,7 +18,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
   standalone: true,
   imports: [CommonModule, FormsModule, FontAwesomeModule, MatButtonModule, GetCharacteristicByIdPipe]
 })
-export class TemplatesPage implements OnInit {
+export class TemplatesPage {
   //injections
   private dialog = inject(MatDialog);
   private templatesService = inject(TemplatesService);
@@ -33,12 +31,6 @@ export class TemplatesPage implements OnInit {
   //data
   protected templates = this.templatesService.templates;
 
-  
-
-  ngOnInit(): void {
-  }
-
-
   protected createTemplate(template: Template | undefined = undefined) {
     if (!template) {
       template = EMPTY_OBJECTS.getEmptyUcomConnectTemplate();
@@ -48,10 +40,8 @@ export class TemplatesPage implements OnInit {
     });
   }
 
-  editTemplate(template: Template): void {
+  protected editTemplate(template: Template): void {
     this.createTemplate(template);
   }
-
-
 
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal, viewChildren } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, viewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { UCOM_CONNECT_CHARACTERISTICS } from 'src/app/shared/consts/ucom-connect
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faPaperPlane, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { DeviceCharacteristicComponent } from './components/device-characteristic/device-characteristic.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
@@ -21,6 +21,8 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { v4 as uuid } from 'uuid';
 import { FindTemplateByIdPipe } from './pipes/find-template-by-id.pipe';
 import { Template } from 'src/app/shared/interfaces/templates/template.interface';
+import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
+import { MatChipsModule } from '@angular/material/chips';
 
 enum FormGroupKeys {
   Template = 'template',
@@ -42,8 +44,10 @@ enum FormGroupKeys {
     MatSelect,
     MatSelectTrigger,
     MatOption,
+    MatChipsModule,
     //pipes
-    FindTemplateByIdPipe
+    FindTemplateByIdPipe,
+    GetCharacteristicByIdPipe,
   ]
 })
 export class DevicePage implements OnInit {
@@ -52,16 +56,19 @@ export class DevicePage implements OnInit {
   private characteristicsService = inject(CharacteristicsService);
   private templatesService = inject(TemplatesService);
   private fb = inject(FormBuilder);
+
   //consts
   protected readonly ucomConnectCharacteristics: BluetoothCharacteristic[] = JSON.parse(JSON.stringify(UCOM_CONNECT_CHARACTERISTICS));
   protected readonly bluetoothAction = BluetoothAction;
   protected readonly addIcon = faPlus;
+  protected readonly writeAllIcon = faPaperPlane;
   protected readonly FGK = FormGroupKeys;
 
   //viewchildren
   private readonly characteristicItems = viewChildren(DeviceCharacteristicComponent);
 
   //data
+  protected allCharacteristics = this.characteristicsService.allCharacteristics;
   protected scanResult = signal<ScanResult | undefined>(undefined);
   protected selfCreatedCharacteristics = this.characteristicsService.selfCreatedCharacteristicsReadonly;
   protected templates = this.templatesService.templates;
@@ -104,8 +111,21 @@ export class DevicePage implements OnInit {
 
   private fillInStdValues(): void {
     this.characteristicItems().forEach(characteristicItem => {
+      const currentCharacteristic = characteristicItem.characteristic();
+      const templateData = this.selectedTemplate()?.data.find(d => d.characteristicId === currentCharacteristic.id);
 
+      if (templateData) {
+        const writeValue = templateData.writeValue
+        characteristicItem.setWriteValue(writeValue, currentCharacteristic.dataType);
+      }
     });
+  }
+
+
+  protected writeAll(): void {
+    this.characteristicItems().forEach(item => {
+      item.writeCharacteristic();
+    })
   }
 
   protected onCharacteristicWritten(): void {
