@@ -61,7 +61,6 @@ export class DevicePage implements OnInit {
   protected readonly ucomConnectCharacteristics: BluetoothCharacteristic[] = JSON.parse(JSON.stringify(UCOM_CONNECT_CHARACTERISTICS));
   protected readonly bluetoothAction = BluetoothAction;
   protected readonly addIcon = faPlus;
-  protected readonly writeAllIcon = faPaperPlane;
   protected readonly FGK = FormGroupKeys;
 
   //viewchildren
@@ -119,13 +118,6 @@ export class DevicePage implements OnInit {
         characteristicItem.setWriteValue(writeValue, currentCharacteristic.dataType);
       }
     });
-  }
-
-
-  protected writeAll(): void {
-    this.characteristicItems().forEach(item => {
-      item.writeCharacteristic();
-    })
   }
 
   protected onCharacteristicWritten(): void {
