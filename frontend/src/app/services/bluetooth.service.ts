@@ -10,10 +10,7 @@ import { bluetoothWriteValue } from '../shared/types/bluetooth.type';
 })
 export class BluetoothService {
   protected readonly SERVICES = [
-    // '3216f2a6-8522-4855-bf75-0ef063789ea0',
     numberToUUID(0x180a),
-    // 'daa6dc5e-9254-11ec-b909-0242ac120002',
-    // '0be217e9-d3a5-428f-a009-31fa6831b9c5'
   ]
 
   public readonly scanResultUpdated = new EventEmitter<ScanResult>();
@@ -54,11 +51,14 @@ export class BluetoothService {
       (async () => {
         try {
           if (deviceId.length > 0 && service.length > 0 && characteristic.length > 0) {
-            await BleClient.initialize();
+            console.log("initialize",deviceId,service,characteristic);
+            //await BleClient.initialize();
 
+            console.log("connect");
             await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
             const dataView = await BleClient.read(deviceId, service, characteristic);
 
+            console.log("parse");
             let value: T = this.parseValue<T>(dataView, dataType);
 
             observer.next(value);
@@ -95,7 +95,7 @@ export class BluetoothService {
     return new Observable<boolean>(observer => {
       (async () => {
         try {
-          await BleClient.initialize();
+          //await BleClient.initialize();
           await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
 
           let valueAsDataView: DataView;
@@ -144,7 +144,7 @@ export class BluetoothService {
     if (!this.isScanning) {
       this.setIsScanning(true);
       try {
-        await BleClient.initialize();
+        //await BleClient.initialize();
 
         await BleClient.requestLEScan(
           {
