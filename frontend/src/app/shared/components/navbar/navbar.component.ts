@@ -6,13 +6,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Page } from '../../interfaces/page.interface';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { IonFooter } from '@ionic/angular/standalone';
+import { IonFooter, IonToolbar } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, IonFooter]
+  imports: [CommonModule, FontAwesomeModule, IonFooter, IonToolbar]
 })
 export class NavbarComponent implements OnInit {
 

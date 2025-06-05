@@ -39,7 +39,7 @@ export class HomePage {
   //flags
   private scannedOnce = false;
   protected isScanning = signal(false)
-  protected bluetoothEnabled = signal(false);
+  protected bluetoothEnabled = signal(true);
 
 
   constructor() {
@@ -56,7 +56,7 @@ export class HomePage {
       }
     });
     this.bluetoothService.bluetoothEnabledUpdated.subscribe((enabled) => {
-      this.bluetoothEnabled.set(enabled);
+      //this.bluetoothEnabled.set(enabled);
       if (enabled) {
         if (!this.scannedOnce) {
           this.scanForDevices();
