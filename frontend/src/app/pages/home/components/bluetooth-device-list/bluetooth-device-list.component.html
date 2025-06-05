@@ -1,7 +1,10 @@
 <h1>{{showAllDevices()?'All':'UCOM-CONNECT'}} Devices</h1>
 @if(filteredScanResults().length===0){
-<p class="no-devices-info">Currently no devices found. Sometimes the UCOM-Connect device has to be reset (push button
-  next to status-led for three seconds. Disconnect and reconnect device to power)</p>
+<p class="no-devices-info">
+  Currently no devices found. Sometimes the UCOM-Connect device has to be reset (push button
+  next to status-led for three seconds. Disconnect and reconnect device to power).
+  <span class="font-bold">Only one device can be connected at the time</span>
+</p>
 }
 <ul class="scan-results-list">
   @for(result of filteredScanResults();track result){
