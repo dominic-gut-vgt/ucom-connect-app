@@ -1,3 +1,54 @@
-<p>
-  device-standard-view works!
-</p>
+<h1 class="pb-3">Setup UCOM Connect Device</h1>
+<mat-stepper orientation="vertical" [linear]="false" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Setup wifi SSID</ng-template>
+    <div class="my-5">
+      @if(wifiSSIDCharacteristic){
+      <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="wifiSSIDCharacteristic"
+        [isSelfCreated]="false" (writtenEvent)="stepper.next()">
+      </app-device-characteristic>
+      }
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Setup wifi password</ng-template>
+    <div class="my-5">
+      @if(wifiPasswordCharacteristic){
+      <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId"
+        [characteristic]="wifiPasswordCharacteristic" [isSelfCreated]="false" (writtenEvent)="stepper.next()">
+      </app-device-characteristic>
+      }
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Connecting</ng-template>
+    <div class="flex items-center mb-3">
+      <mat-spinner></mat-spinner>
+      <p class="ps-4">
+        Your device is currently attempting to establish a connection. Below you can see the current status
+      </p>
+    </div>
+    @if(consoleCharacteristic){
+    <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="consoleCharacteristic"
+      [isSelfCreated]="false">
+    </app-device-characteristic>
+    }
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Finished</ng-template>
+    <div class="flex flex-col items-center my-5">
+      @if(finished()){
+      <fa-icon [icon]="finishedIcon"></fa-icon>
+      <p class="ps-4">
+        Your device is now configured and ready to use.
+      </p>
+      }@else {
+      <fa-icon [icon]="notFinishedIcon" size="2x"></fa-icon>
+      <p class="ps-4">
+        Your device is not yet configured. Please make sure you have set the wifi SSID and password correctly. Sometime
+        establishing a connection can take a few minutes.
+      </p>
+      }
+    </div>
+  </mat-step>
+</mat-stepper>

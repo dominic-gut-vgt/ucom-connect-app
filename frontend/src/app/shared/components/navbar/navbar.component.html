@@ -2,11 +2,11 @@
   <ion-toolbar>
     <div class="nav-container">
       <ul class="nav-list">
-        @for(page of pages;track page.route){
+        @for(page of pages();track page.route){
         <li
           [ngClass]="currentPageRoute()===page.route || (currentPageRoute()==='' && $index===0)?'nav-item active':'nav-item'">
           <button (click)="routeToPage(page)">
-            <h2><fa-icon [icon]="icons[$index]"></fa-icon></h2>
+            <h2><fa-icon [icon]="icons()[$index]"></fa-icon></h2>
           </button>
         </li>
         }

@@ -2,10 +2,10 @@
   <div class="width-wrapper">
     @switch(currentUserMode()){
     @case (userMode.Standard) {
-    <app-device-standard-view></app-device-standard-view>
+    <app-device-standard-view [scanResult]="scanResult()" ></app-device-standard-view>
     }
     @case (userMode.Pro) {
-    <app-device-pro-view></app-device-pro-view>
+    <app-device-pro-view [scanResult]="scanResult()"></app-device-pro-view>
     }
     }
 

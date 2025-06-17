@@ -6,7 +6,7 @@ import { UserMode } from '../shared/enums/user-mode.enum';
 })
 export class UserService {
 
-  private currentUserMode=signal(UserMode.Pro);
+  private currentUserMode=signal(UserMode.Standard);
   public currentUserModeReadonly = this.currentUserMode.asReadonly();
 
   constructor() { }

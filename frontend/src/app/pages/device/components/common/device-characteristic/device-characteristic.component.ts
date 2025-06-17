@@ -8,7 +8,7 @@ import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
+import { CharacteristicInfosDialogComponent } from '../../device-pro-view/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
@@ -119,7 +119,7 @@ export class DeviceCharacteristicComponent {
             default:
               console.warn('Unsupported data type for characteristic value update');
           }
-
+          this.readEvent.emit();
           this.updated.set(true);
           setTimeout(() => {
             this.updated.set(false);

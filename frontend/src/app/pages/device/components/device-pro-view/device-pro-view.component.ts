@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, OnInit, signal, viewChildren } from '@angular/core';
-import { DeviceCharacteristicComponent } from './components/device-characteristic/device-characteristic.component';
+import { ChangeDetectionStrategy, Component, effect, inject, input, OnInit, signal, viewChildren } from '@angular/core';
+import { DeviceCharacteristicComponent } from '../common/device-characteristic/device-characteristic.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -30,6 +30,7 @@ enum FormGroupKeys {
   selector: 'app-device-pro-view',
   templateUrl: './device-pro-view.component.html',
   styleUrls: ['./device-pro-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     DeviceCharacteristicComponent,
@@ -50,11 +51,15 @@ enum FormGroupKeys {
 
 export class DeviceProViewComponent implements OnInit {
 
-  private router = inject(Router);
+  //injections
   private dialog = inject(MatDialog);
   private characteristicsService = inject(CharacteristicsService);
   private templatesService = inject(TemplatesService);
   private fb = inject(FormBuilder);
+
+  //inputs
+  scanResult = input.required<ScanResult | undefined>();
+
 
   //consts
   protected readonly ucomConnectCharacteristics: BluetoothCharacteristic[] = JSON.parse(JSON.stringify(UCOM_CONNECT_CHARACTERISTICS));
@@ -67,7 +72,6 @@ export class DeviceProViewComponent implements OnInit {
 
   //data
   protected allCharacteristics = this.characteristicsService.allCharacteristics;
-  protected scanResult = signal<ScanResult | undefined>(undefined);
   protected selfCreatedCharacteristics = this.characteristicsService.selfCreatedCharacteristicsReadonly;
   protected templates = this.templatesService.templates;
 
@@ -93,8 +97,6 @@ export class DeviceProViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    const nav = this.router.getCurrentNavigation();
-    this.scanResult.set(nav?.extras?.state?.[ROUTE_PARAM_IDS.scanResult]);
   }
 
   private subscribeToFormChanges(): void {
