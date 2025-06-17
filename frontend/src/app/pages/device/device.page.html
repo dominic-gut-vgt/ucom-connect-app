@@ -1,80 +1,12 @@
 <div class="page-container">
   <div class="width-wrapper">
-    <div class="w-full flex flex-col">
-      <h1 class="w-full mb-2">{{scanResult()?.device?.name}}</h1>
-      <button mat-flat-button class="mb-3" (click)="openCreateOrUpdateCharacteristicDialog()"> <fa-icon
-          [icon]="addIcon"></fa-icon> characteristic </button>
-    </div>
-
-    <!-- Templates Dropdown -->
-    @if(templates().length>0){
-    <form [formGroup]="templatesForm" class="form-container w-full">
-      <mat-form-field class="w-full">
-        <mat-label>Select a template</mat-label>
-        <mat-select [formControlName]="FGK.Template">
-
-
-          <mat-select-trigger>
-            {{selectedTemplate()?selectedTemplate()?.name:'Select a template'}}
-          </mat-select-trigger>
-
-          @for(template of templates(); track template.id) {
-          <mat-option [value]="template.id">
-            <div class="p-3">
-              <h2>{{template.name}}</h2>
-              <p>{{template.description}}</p>
-              <mat-chip-set>
-                @for(data of template.data;track data.characteristicId){
-                @let characteristicOfCurrentItem=data.characteristicId|getCharacteristicById:allCharacteristics();
-                <mat-chip>{{characteristicOfCurrentItem?.title}}</mat-chip>
-                }
-              </mat-chip-set>
-
-            </div>
-          </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </form>
+    @switch(currentUserMode()){
+    @case (userMode.Standard) {
+    <app-device-standard-view></app-device-standard-view>
     }
-
-    <!-- main characteristics -->
-    <div class="pb-5">
-      <ul>
-        @for(characteristic of ucomConnectCharacteristics;track characteristic){
-        <li class="card-std">
-          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic"
-            [isSelfCreated]="false" (writtenEvent)="onCharacteristicWritten()">
-          </app-device-characteristic>
-        </li>
-        }
-      </ul>
-    </div>
-
-
-    @if(selfCreatedCharacteristics().length>0){
-    <!-- divider -->
-    <div class="flex items-center py-5">
-      <p class="text-nowrap pe-3 text-gray-500">
-        Self created characteristics
-      </p>
-      <hr class="divider">
-    </div>
-
-
-    <!-- Self created characteristics -->
-    <div class="pb-5">
-      <ul>
-        @for(characteristic of selfCreatedCharacteristics();track characteristic){
-        <li class="card-std">
-          <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="characteristic"
-            [isSelfCreated]="true" (writtenEvent)="onCharacteristicWritten()"
-            (editCharacteristicEvent)="openEditCharacteristicDialog(characteristic)">
-          </app-device-characteristic>
-        </li>
-        }
-      </ul>
-    </div>
+    @case (userMode.Pro) {
+    <app-device-pro-view></app-device-pro-view>
+    }
     }
 
   </div>

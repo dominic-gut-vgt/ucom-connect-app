@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule, MatSelectTrigger } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
 import { v4 as uuid } from 'uuid';
@@ -19,6 +18,7 @@ import { TemplatesService } from 'src/app/services/templates.service';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
+import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/components/device-pro-view/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 
 enum FormGroupKeys {
   Id = 'id',

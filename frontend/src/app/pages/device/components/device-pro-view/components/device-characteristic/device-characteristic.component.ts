@@ -10,11 +10,11 @@ import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-cha
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ValuetoToCharacteristicInfoPipe } from '../../pipes/value-to-charactristic-info.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { bluetoothWriteValue } from 'src/app/shared/types/bluetooth.type';
+import { ValuetoToCharacteristicInfoPipe } from 'src/app/pages/device/pipes/value-to-charactristic-info.pipe';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',
