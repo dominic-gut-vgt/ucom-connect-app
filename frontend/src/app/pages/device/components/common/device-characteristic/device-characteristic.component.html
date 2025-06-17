@@ -70,7 +70,7 @@
           [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
         }
         @case (bluetoothDataType.Number){
-        <mat-form-field class="" appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>{{characteristic().description}}</mat-label>
           <input matInput [formControlName]="FGK.NumberValue" placeholder="Value to send" />
         </mat-form-field>
