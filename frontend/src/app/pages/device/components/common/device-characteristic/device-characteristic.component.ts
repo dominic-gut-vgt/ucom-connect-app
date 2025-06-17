@@ -156,7 +156,7 @@ export class DeviceCharacteristicComponent {
     this.editCharacteristicEvent.emit();
   }
 
-  private getWriteValue(): bluetoothWriteValue {
+  public getWriteValue(): bluetoothWriteValue {
     switch (this.characteristic().dataType) {
       case BluetoothDataType.Boolean:
         return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
@@ -183,7 +183,4 @@ export class DeviceCharacteristicComponent {
       default: ''
     }
   }
-
-
-
 }

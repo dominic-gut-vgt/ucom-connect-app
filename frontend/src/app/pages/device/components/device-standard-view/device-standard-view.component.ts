@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { UCOM_CONNECT_CHARACTERISTICS } from 'src/app/shared/consts/ucom-connect-characteristics';
@@ -25,7 +25,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatProgressSpinnerModule,
   ],
 })
-export class DeviceStandardViewComponent {
+export class DeviceStandardViewComponent implements OnInit, OnDestroy {
   //injections
   scanResult = input.required<ScanResult | undefined>();
 
@@ -36,10 +36,29 @@ export class DeviceStandardViewComponent {
   protected readonly finishedIcon = faCheck;
   protected readonly notFinishedIcon = faXmark;
 
+  //viewchildren
+  private consoleCharacteristicElem = viewChild<DeviceCharacteristicComponent>('consoleCharacteristicElem');
+
+  //data
+  private interval: any;
+
   //flags
   protected finished = signal(false);
 
-  onConsoleReadValueUpdated(value: string): void {
+  ngOnInit(): void {
+    this.interval = setInterval(() => {
+      this.consoleCharacteristicElem()?.readCharacteristic();
+    }, 2000);
+  }
 
+  onConsoleReadValueUpdated(): void {
+    const value = this.consoleCharacteristicElem()?.getWriteValue();
+    this.finished.set(value === 'S11'); //S11 is defined as finished
+  }
+
+  ngOnDestroy(): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
 }
