@@ -134,7 +134,7 @@ export class DeviceCharacteristicComponent {
     }
   }
 
-  protected writeCharacteristic(): void {
+  public writeCharacteristic(): void {
     if (!this.isWriting() && this.characteristicIsWritable()) {
       const value = this.getWriteValue();
       this.isWriting.set(true);

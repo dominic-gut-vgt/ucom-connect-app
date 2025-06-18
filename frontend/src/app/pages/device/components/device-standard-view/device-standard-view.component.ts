@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, input, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { UCOM_CONNECT_CHARACTERISTICS } from 'src/app/shared/consts/ucom-connect-characteristics';
@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
 
 
 @Component({
@@ -25,11 +26,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatProgressSpinnerModule,
   ],
 })
-export class DeviceStandardViewComponent implements OnInit, OnDestroy {
+export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDestroy {
   //injections
   scanResult = input.required<ScanResult | undefined>();
 
   //consts
+  protected readonly cloudURICharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.CloudURI);
   protected readonly wifiPasswordCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiPassword);
   protected readonly wifiSSIDCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiSSID);
   protected readonly consoleCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.Console);
@@ -37,7 +39,9 @@ export class DeviceStandardViewComponent implements OnInit, OnDestroy {
   protected readonly notFinishedIcon = faXmark;
 
   //viewchildren
+  private stepper = viewChild<MatStepperModule>('stepper');
   private consoleCharacteristicElem = viewChild<DeviceCharacteristicComponent>('consoleCharacteristicElem');
+  private cloudURICharacteristicElem = viewChild<DeviceCharacteristicComponent>('cloudURICharacteristicElem');
 
   //data
   private interval: any;
@@ -51,7 +55,17 @@ export class DeviceStandardViewComponent implements OnInit, OnDestroy {
     }, 2000);
   }
 
-  onConsoleReadValueUpdated(): void {
+  ngAfterViewInit(): void {
+    this.setupCloudURICharacteristic();
+  }
+
+  private setupCloudURICharacteristic(): void {
+    this.cloudURICharacteristicElem()?.setWriteValue('https://ucom-connect.cloud', BluetoothDataType.String);
+    this.cloudURICharacteristicElem()?.writeCharacteristic();
+  }
+
+  //events
+  protected onConsoleReadValueUpdated(): void {
     const value = this.consoleCharacteristicElem()?.getWriteValue();
     this.finished.set(value === 'S11'); //S11 is defined as finished
   }
