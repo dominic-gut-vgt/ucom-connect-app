@@ -39,7 +39,6 @@
 
       .write-btn {
         height: var(--input-height);
-        margin-left: var(--space-3);
 
         &.is-writing {
           animation: blinkAnimation 2s infinite;

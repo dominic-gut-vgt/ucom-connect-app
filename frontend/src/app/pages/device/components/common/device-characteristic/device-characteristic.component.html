@@ -60,8 +60,8 @@
   </div>
 
   @if(characteristicIsWritable()){
-  <div class="input-container flex">
-    <div class="input-wrapper w-full mt-5">
+  <div class="input-container flex flex-wrap justify-between">
+    <div class="input-wrapper w-full sm:w-75 sm:mt-5 me-3">
       <form [formGroup]="characteristicValueForm">
 
         @switch (characteristic().dataType) {
@@ -84,7 +84,7 @@
       </form>
 
     </div>
-    <button mat-flat-button class="mt-5" [ngClass]="isWriting()?'write-btn is-writing mt-5':'write-btn mt-5'"
+    <button mat-flat-button class="sm:mt-5 w-full sm:w-25" [ngClass]="isWriting()?'write-btn is-writing':'write-btn'"
       (click)="writeCharacteristic()">
       Send
     </button>
