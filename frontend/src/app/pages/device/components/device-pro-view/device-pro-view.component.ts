@@ -9,18 +9,16 @@ import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CharacteristicsService } from 'src/app/services/characteristics.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { EMPTY_OBJECTS } from 'src/app/shared/consts/empty-objects';
-import { ROUTE_PARAM_IDS } from 'src/app/shared/consts/routes';
 import { UCOM_CONNECT_CHARACTERISTICS } from 'src/app/shared/consts/ucom-connect-characteristics';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
-import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { Template } from 'src/app/shared/interfaces/templates/template.interface';
 import { CreateOrUpdateCharacteristicDialogComponent } from './components/create-or-update-characteristic-dialog/create-or-update-characteristic-dialog.component';
+import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
 
 enum FormGroupKeys {
   Template = 'template',

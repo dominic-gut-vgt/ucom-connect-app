@@ -1,7 +1,7 @@
 import { BluetoothAction } from "../enums/bluetooth-action.enum";
 import { BluetoothDataType } from "../enums/bluetooth-data-type.enum";
 import { UcomConnectcharacteristicTitle } from "../enums/ucom-connect-characteristic-title.enum";
-import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from "../interfaces/bluetooth-characteristic";
+import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from "../interfaces/bluetooth-characteristic.interface";
 
 
 //characteristic infos-------------------------------------------------------------------

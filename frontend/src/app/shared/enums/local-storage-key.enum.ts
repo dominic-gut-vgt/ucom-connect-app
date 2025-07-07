@@ -1,4 +1,5 @@
 export enum LocalStorageKey{
   Templates= 'templates',
-  Characteristics='characteristics'
+  Characteristics='characteristics',
+  Settings='settings',
 }

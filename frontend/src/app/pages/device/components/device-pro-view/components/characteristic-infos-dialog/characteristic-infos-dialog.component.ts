@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic';
-
+import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
 
 @Component({
   selector: 'app-characteristic-infos-dialog',
@@ -9,16 +8,12 @@ import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth
   styleUrls: ['./characteristic-infos-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharacteristicInfosDialogComponent implements OnInit {
+export class CharacteristicInfosDialogComponent {
  readonly dialogRef = inject(MatDialogRef<CharacteristicInfosDialogComponent>);
   readonly infos = inject<BluetoothCharacteristicInfo[]>(MAT_DIALOG_DATA);
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-  constructor() { }
-
-  ngOnInit() { }
 
 }

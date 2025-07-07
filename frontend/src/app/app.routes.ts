@@ -27,6 +27,4 @@ export const routes: Routes = [
     path: PAGES.templates.route,
     loadComponent: () => import('./pages/templates/templates.page').then(m => m.TemplatesPage),
   },
-
-
 ];

@@ -36,6 +36,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@ionic/angular": "^8.0.0",
+    "@ngrx/signals": "^19.2.1",
     "@tailwindcss/postcss": "^4.1.7",
     "ionicons": "^7.0.0",
     "postcss": "^8.5.3",

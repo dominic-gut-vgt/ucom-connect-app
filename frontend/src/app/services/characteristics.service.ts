@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { UCOM_CONNECT_CHARACTERISTICS } from '../shared/consts/ucom-connect-characteristics';
-import { BluetoothCharacteristic } from '../shared/interfaces/bluetooth-characteristic';
 import { LocalStorageService } from './local-storage.service';
 import { LocalStorageKey } from '../shared/enums/local-storage-key.enum';
+import { BluetoothCharacteristic } from '../shared/interfaces/bluetooth-characteristic.interface';
 
 @Injectable({
   providedIn: 'root'

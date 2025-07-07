@@ -1,3 +1,22 @@
 <div class="page-container">
-  <h1>Settings</h1>
+  <ul class="w-full">
+    <li class="settings-item w-full">
+      <h2><fa-icon [icon]="versionIcon"></fa-icon> App Version</h2>
+      <p>Version {{appVersion}}</p>
+    </li>
+
+    <li class="settings-item my-4 w-full">
+      <h2><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
+      <mat-form-field class="w-full">
+        <mat-label>Select an option</mat-label>
+        <mat-select [(value)]="userMode" (valueChange)="onUserModeChange()">
+          @for(userMode of userModes;track userMode){
+            <mat-option [value]="userMode">
+              {{userModeMap[userMode]}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </li>
+  </ul>
 </div>

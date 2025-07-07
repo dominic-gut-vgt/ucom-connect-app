@@ -1,6 +1,6 @@
 import { BluetoothAction } from "../enums/bluetooth-action.enum";
 import { BluetoothDataType } from "../enums/bluetooth-data-type.enum";
-import { BluetoothCharacteristic } from "../interfaces/bluetooth-characteristic";
+import { BluetoothCharacteristic } from "../interfaces/bluetooth-characteristic.interface";
 import { Template, TemplateData } from "../interfaces/templates/template.interface";
 
 class EmptyObjects {

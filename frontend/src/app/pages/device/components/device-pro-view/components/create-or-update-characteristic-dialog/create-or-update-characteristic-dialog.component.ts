@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { CharacteristicInfosDialogComponent } from '../characteristic-infos-dialog/characteristic-infos-dialog.component';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +16,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { LocalStorageKey } from 'src/app/shared/enums/local-storage-key.enum';
 import { v4 as uuid } from 'uuid';
 import { CharacteristicsService } from 'src/app/services/characteristics.service';
+import { BluetoothCharacteristic, BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
 
 enum FormGroupKeys {
   Id = 'id',

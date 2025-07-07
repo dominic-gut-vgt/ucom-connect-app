@@ -6,7 +6,6 @@ import { faBook, faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
-import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CharacteristicInfosDialogComponent } from '../../device-pro-view/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +14,7 @@ import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { bluetoothWriteValue } from 'src/app/shared/types/bluetooth.type';
 import { ValuetoToCharacteristicInfoPipe } from 'src/app/pages/device/pipes/value-to-charactristic-info.pipe';
+import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
 
 enum FormGroupKeys {
   StringValue = 'stringValue',

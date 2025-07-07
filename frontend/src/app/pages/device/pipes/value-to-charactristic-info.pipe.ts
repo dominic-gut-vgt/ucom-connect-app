@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic';
+import { BluetoothCharacteristicInfo } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
 
 @Pipe({
   name: 'valuetoToCharacteristicInfo',

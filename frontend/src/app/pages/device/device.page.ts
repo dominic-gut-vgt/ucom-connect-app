@@ -7,6 +7,7 @@ import { DeviceProViewComponent } from './components/device-pro-view/device-pro-
 import { Router } from '@angular/router';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { ROUTE_PARAM_IDS } from 'src/app/shared/consts/routes';
+import { SettingsStore } from 'src/app/shared/stores/settings/settings-store';
 
 @Component({
   selector: 'app-device',
@@ -21,14 +22,14 @@ import { ROUTE_PARAM_IDS } from 'src/app/shared/consts/routes';
 })
 export class DevicePage implements OnInit {
   //injections
-  private userService = inject(UserService);
   private router = inject(Router);
+  private settingsStore=inject(SettingsStore);
 
   //consts
   protected readonly userMode = UserMode;
 
   //data
-  protected currentUserMode = this.userService.currentUserModeReadonly
+  protected currentUserMode = this.settingsStore.settings.userMode;
   protected scanResult = signal<ScanResult | undefined>(undefined);
 
   ngOnInit(): void {

@@ -9,6 +9,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { IonFooter, IonToolbar } from '@ionic/angular/standalone';
 import { UserService } from 'src/app/services/user.service';
 import { UserMode } from '../../enums/user-mode.enum';
+import { SettingsStore } from '../../stores/settings/settings-store';
 
 @Component({
   selector: 'app-navbar',
@@ -19,41 +20,47 @@ import { UserMode } from '../../enums/user-mode.enum';
 export class NavbarComponent implements OnInit {
 
   //injections
-  private readonly router = inject(Router);
-  private readonly navigationService = inject(NavigationService);
-  private readonly usereService = inject(UserService);
+  private router = inject(Router);
+  private navigationService = inject(NavigationService);
+  private settingsStore=inject(SettingsStore);
+  
+ // private readonly usereService = inject(UserService);
 
   //data
   protected currentPageRoute = signal('');
-  private userMode = this.usereService.currentUserModeReadonly;
+  private userMode = this.settingsStore.settings.userMode;
 
   //derived data
   protected pages = computed(() => {
     if (this.userMode() === UserMode.Standard) {
       return [
         PAGES.home,
+        PAGES.settings,
         PAGES.info
       ];
     }
     return [
       PAGES.home,
+      PAGES.settings,
       PAGES.templates,
       PAGES.info
     ];
   });
 
   protected icons = computed(() => {
-    if (this.userMode() === UserMode.Standard) {
-      return [
+    switch (this.userMode()) {
+      case UserMode.Standard: return [
         faHome,
+        faGear,
         faInfoCircle,
-      ]
+      ];
+      default: return [
+        faHome,
+        faGear,
+        faPaste,
+        faInfoCircle,
+      ];
     }
-    return [
-      faHome,
-      faPaste,
-      faInfoCircle,
-    ]
   });
 
   constructor() {
