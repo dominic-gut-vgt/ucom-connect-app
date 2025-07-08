@@ -25,7 +25,7 @@ const BLUETOOTH_CHARACTERISTIC: BluetoothCharacteristic = {
   uuid: '',
   serviceUUID: '',
   deviceId: '',
-  dataType: BluetoothDataType.String,
+  dataType: BluetoothDataType.String128,
   bluetoothAction: BluetoothAction.Read,
   value: '',
   onlyPredefinedValuePossible: false,

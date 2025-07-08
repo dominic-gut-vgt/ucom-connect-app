@@ -51,7 +51,7 @@ export class BluetoothService {
       (async () => {
         try {
           if (deviceId.length > 0 && service.length > 0 && characteristic.length > 0) {
-  
+
             await BleClient.connect(deviceId, (deviceId) => { console.info('disconnected ', deviceId) });
             const dataView = await BleClient.read(deviceId, service, characteristic);
 
@@ -72,7 +72,9 @@ export class BluetoothService {
 
   parseValue<T>(dataView: DataView, dataType: BluetoothDataType): T {
     switch (dataType) {
-      case BluetoothDataType.String:
+      case BluetoothDataType.String128:
+      case BluetoothDataType.String64:
+      case BluetoothDataType.String32:
         const byteArray = new Uint8Array(dataView.buffer);
         const decoder = new TextDecoder('utf-8');
         const rawString = decoder.decode(byteArray) as string;
@@ -95,7 +97,16 @@ export class BluetoothService {
 
           let valueAsDataView: DataView;
           switch (bluetoothDatatype) {
-            case BluetoothDataType.String: valueAsDataView = hexStringToDataView(this.stringToHex(value as string)); break;
+            case BluetoothDataType.String128:
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 128)//hexStringToDataView(this.stringToHex(value as string));
+              break;
+            case BluetoothDataType.String64:
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 64)//hexStringToDataView(this.stringToHex(value as string));
+              break;
+            case BluetoothDataType.String32:
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 32)//hexStringToDataView(this.stringToHex(value as string));
+              break;
+
             case BluetoothDataType.Boolean:
               const boolBuffer = new ArrayBuffer(1);
               new DataView(boolBuffer).setUint8(0, value ? 1 : 0);
@@ -126,6 +137,22 @@ export class BluetoothService {
         }
       })();
     })
+  }
+
+  private stringToFixedLengthDataView(str: string, length: number): DataView {
+    const encoder = new TextEncoder();
+    let bytes = encoder.encode(str);
+
+    if (bytes.length > length) {
+      // Truncate if too long
+      bytes = bytes.slice(0, length);
+    } else if (bytes.length < length) {
+      // Pad with null bytes if too short
+      const padded = new Uint8Array(length);
+      padded.set(bytes);
+      bytes = padded;
+    }
+    return new DataView(bytes.buffer);
   }
 
   private stringToHex(str: string): string {

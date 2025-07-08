@@ -110,7 +110,9 @@ export class DeviceCharacteristicComponent {
             case BluetoothDataType.Boolean:
               this.characteristicValueForm.get(this.FGK.BooleanValue)?.setValue(value as boolean);
               break;
-            case BluetoothDataType.String:
+            case BluetoothDataType.String128:
+            case BluetoothDataType.String64:
+            case BluetoothDataType.String32:
               this.characteristicValueForm.get(this.FGK.StringValue)?.setValue(value as string);
               break;
             case BluetoothDataType.Number:
@@ -160,7 +162,9 @@ export class DeviceCharacteristicComponent {
     switch (this.characteristic().dataType) {
       case BluetoothDataType.Boolean:
         return this.characteristicValueForm.get(this.FGK.BooleanValue)?.value;
-      case BluetoothDataType.String:
+      case BluetoothDataType.String128:
+      case BluetoothDataType.String64:
+      case BluetoothDataType.String32:
         return this.characteristicValueForm.get(this.FGK.StringValue)?.value;
       case BluetoothDataType.Number:
       case BluetoothDataType.Uint8:
@@ -175,7 +179,10 @@ export class DeviceCharacteristicComponent {
   public setWriteValue(value: bluetoothWriteValue, dataType: BluetoothDataType) {
     switch (dataType) {
       case BluetoothDataType.Boolean: return this.characteristicValueForm.get(this.FGK.BooleanValue)?.setValue(value);
-      case BluetoothDataType.String: return this.characteristicValueForm.get(this.FGK.StringValue)?.setValue(value);
+      case BluetoothDataType.String128:
+      case BluetoothDataType.String64:
+      case BluetoothDataType.String32:
+        return this.characteristicValueForm.get(this.FGK.StringValue)?.setValue(value);
       case BluetoothDataType.Number:
       case BluetoothDataType.Uint8:
       case BluetoothDataType.Int16:

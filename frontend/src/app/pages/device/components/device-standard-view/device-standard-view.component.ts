@@ -65,7 +65,7 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
   }
 
   private setupCloudURICharacteristic(): void {
-    this.cloudURICharacteristicElem()?.setWriteValue('https://ucom-connect.cloud', BluetoothDataType.String);
+    this.cloudURICharacteristicElem()?.setWriteValue('ws://51.103.222.244:8080/stream', BluetoothDataType.String128);
     this.cloudURICharacteristicElem()?.writeCharacteristic();
   }
 

@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule, MatSelectTrigger } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
-import { v4 as uuid } from 'uuid';
-import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
+import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/components/device-pro-view/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { CharacteristicsService } from 'src/app/services/characteristics.service';
 import { TemplatesService } from 'src/app/services/templates.service';
+import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
-import { CharacteristicInfosDialogComponent } from 'src/app/pages/device/components/device-pro-view/components/characteristic-infos-dialog/characteristic-infos-dialog.component';
 import { BluetoothCharacteristic } from 'src/app/shared/interfaces/bluetooth-characteristic.interface';
+import { Template, TemplateData } from 'src/app/shared/interfaces/templates/template.interface';
+import { GetCharacteristicByIdPipe } from 'src/app/shared/pipes/get-characteristic-by-id.pipe';
+import { v4 as uuid } from 'uuid';
 
 enum FormGroupKeys {
   Id = 'id',
@@ -33,8 +33,22 @@ enum FormGroupKeys {
   selector: 'app-create-or-update-template',
   templateUrl: './create-or-update-template.component.html',
   styleUrls: ['./create-or-update-template.component.scss'],
-  imports: [CommonModule, FontAwesomeModule, GetCharacteristicByIdPipe, ReactiveFormsModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatFormFieldModule, MatButtonModule, MatSelectTrigger, MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    //pipes
+    GetCharacteristicByIdPipe,
+    //material
+    MatSelectModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatSelectTrigger,
+    MatSlideToggleModule,
+  ],
 })
 export class CreateOrUpdateTemplateComponent implements OnInit {
   //injections

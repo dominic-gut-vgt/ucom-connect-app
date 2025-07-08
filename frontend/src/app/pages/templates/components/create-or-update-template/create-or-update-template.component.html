@@ -54,22 +54,32 @@
 
         <!-- Characteristic write value -->
         @switch (characteristicOfCurrentItem?.dataType) {
-        @case (bluetoothDataType.String) {
+        @case (bluetoothDataType.String128) {
         <mat-form-field class="w-full">
           <mat-label>Predefined write value</mat-label>
           <input matInput type="text" [formControlName]="FGK.WriteValue" />
         </mat-form-field>
         }
-        @case (bluetoothDataType.Number || bluetoothDataType.Int16 || bluetoothDataType.Int32 ||
-        bluetoothDataType.Uint8) {
+        @case (bluetoothDataType.String64) {
+        <mat-form-field class="w-full">
+          <mat-label>Predefined write value</mat-label>
+          <input matInput type="text" [formControlName]="FGK.WriteValue" />
+        </mat-form-field>
+        }
+        @case (bluetoothDataType.String32) {
+        <mat-form-field class="w-full">
+          <mat-label>Predefined write value</mat-label>
+          <input matInput type="text" [formControlName]="FGK.WriteValue" />
+        </mat-form-field>
+        }
+        @case (bluetoothDataType.Number) {
         <mat-form-field class="w-full">
           <mat-label>Predefined write value</mat-label>
           <input matInput type="number" [formControlName]="FGK.WriteValue" />
         </mat-form-field>
         }
         @case(bluetoothDataType.Boolean){
-        <mat-slide-toggle class="w-full"
-          [formControlName]="FGK.WriteValue">Predefined write value</mat-slide-toggle>
+        <mat-slide-toggle class="w-full" [formControlName]="FGK.WriteValue">Predefined write value</mat-slide-toggle>
         }
         }
 

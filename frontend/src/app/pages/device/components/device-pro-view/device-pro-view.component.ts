@@ -114,6 +114,7 @@ export class DeviceProViewComponent implements OnInit {
 
       if (templateData) {
         const writeValue = templateData.writeValue
+        console.log();
         characteristicItem.setWriteValue(writeValue, currentCharacteristic.dataType);
       }
     });
