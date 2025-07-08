@@ -1,22 +1,44 @@
 <div class="page-container">
   <ul class="w-full">
-    <li class="settings-item w-full">
-      <h2><fa-icon [icon]="versionIcon"></fa-icon> App Version</h2>
-      <p>Version {{appVersion}}</p>
-    </li>
 
     <li class="settings-item my-4 w-full">
-      <h2><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
-      <mat-form-field class="w-full">
-        <mat-label>Select an option</mat-label>
-        <mat-select [(value)]="userMode" (valueChange)="onUserModeChange()">
-          @for(userMode of userModes;track userMode){
+      <h1 class="pt-4">General infos</h1>
+      <div class="card-std mt-4">
+        <h2><fa-icon [icon]="versionIcon"></fa-icon> App Version</h2>
+        <p>Version {{appVersion}}</p>
+      </div>
+    </li>
+
+    <li class="settings-item my-4 py-4 w-full">
+      <h1 class="pt-4">Main Settings</h1>
+      <div class="card-std">
+        <h2><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
+
+        @switch (userMode()) {
+        @case (userModeEnum.Standard) {
+        <p class="py-3">You are currently in standard mode. In this mode you can use the app to connect to your UCOM
+          Connect devices.
+        </p>
+        }
+        @case (userModeEnum.Pro) {
+        <p class="py-3">You are currently in advanced mode. Only use this with caution. In this mode you can use the app
+          to connect to your UCOM
+          Connect devices. Additionall functionality and debugging features are available.
+        </p>
+        }
+        }
+
+        <mat-form-field class="w-full">
+          <mat-label>Select an app mode</mat-label>
+          <mat-select [(value)]="userMode" (valueChange)="onUserModeChange()">
+            @for(userMode of userModes;track userMode){
             <mat-option [value]="userMode">
               {{userModeMap[userMode]}}
             </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
     </li>
   </ul>
 </div>

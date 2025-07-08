@@ -40,7 +40,7 @@ export const SettingsStore = signalStore(
     },
   })),
   withHooks({
-    onInit({loadSettings  }) {
+    onInit({loadSettings}) {
         loadSettings();
     },
   }),

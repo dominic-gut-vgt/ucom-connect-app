@@ -32,23 +32,21 @@
         </p>
       </div>
 
-      <!-- Description -->
-      @if(characteristic().bluetoothAction===bluetoothAction.Read){
-      <p>
-        {{characteristic().description}}
-      </p>
-      }
-
+      <!-- Info -->
       @if(characteristic().infos.length>0){
-
       @let infoOfValue=(characteristic().value | valuetoToCharacteristicInfo:characteristic().infos);
-
       @if(infoOfValue){
       <div class="info-of-value-container">
         <p class="info-of-value">Info: {{infoOfValue.description}}</p>
       </div>
       }
+      }
 
+      <!-- Description -->
+      @if(characteristic().bluetoothAction===bluetoothAction.Read){
+      <p>
+        {{characteristic().description}}
+      </p>
       }
       }
     </div>
@@ -62,11 +60,11 @@
   @if(characteristicIsWritable()){
   <div class="input-container flex flex-wrap justify-between">
     <div class="input-wrapper w-full sm:w-75 sm:mt-5 me-3">
+      @if( !characteristic().onlyPredefinedValuePossible){
       <form [formGroup]="characteristicValueForm">
-
         @switch (characteristic().dataType) {
         @case(bluetoothDataType.Boolean){
-        <mat-slide-toggle class="w-full"
+        <mat-slide-toggle class="w-full pb-4 pt-3"
           [formControlName]="FGK.BooleanValue">{{characteristic().description}}</mat-slide-toggle>
         }
         @case (bluetoothDataType.Number){
@@ -82,12 +80,16 @@
         </mat-form-field> }
         }
       </form>
-
+      }@else {
+      <p class="pb-3">{{characteristic().description}}</p>
+      }
     </div>
-    <button mat-flat-button class="sm:mt-5 w-full sm:w-25" [ngClass]="isWriting()?'write-btn is-writing':'write-btn'"
-      (click)="writeCharacteristic()">
-      Send
+    <button mat-flat-button class="sm:mt-5 w-full sm:w-25" (click)="writeCharacteristic()">
+      <span [ngClass]="isWriting()?'write-btn-text is-writing':'write-btn-text'">
+        {{characteristic().sendBtnText}}
+      </span>
     </button>
   </div>
   }
+
 </div>

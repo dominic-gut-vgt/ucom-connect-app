@@ -23,6 +23,8 @@ export class SettingsPage {
   //consts
   protected readonly userModeMap = USER_MODE_MAP;
   protected readonly userModes = Object.keys(USER_MODE_MAP).map(key => key as UserMode);
+  protected readonly userModeEnum= UserMode;
+  
   //icons
   protected readonly versionIcon = faCodeBranch;
   protected readonly modeIcon = faSliders;

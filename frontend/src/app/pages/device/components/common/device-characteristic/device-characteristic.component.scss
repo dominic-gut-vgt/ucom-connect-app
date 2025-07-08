@@ -16,6 +16,7 @@
             padding: var(--space-1) var(--space-2);
             margin-left: var(--space-1);
             border-radius: var(--radius-s);
+            word-break: break-all;
 
             &.updated {
               background-color: rgb(from var(--color-primary) r g b / 0.2)
@@ -37,8 +38,7 @@
 
     .input-container {
 
-      .write-btn {
-        height: var(--input-height);
+      .write-btn-text {
 
         &.is-writing {
           animation: blinkAnimation 2s infinite;

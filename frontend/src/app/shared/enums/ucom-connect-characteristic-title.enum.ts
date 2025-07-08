@@ -1,5 +1,5 @@
 export enum UcomConnectcharacteristicTitle {
-  Console = 'Console',
+  Status = 'Status', // console
   CloudURI = 'Cloud URI',
   WifiSSID = 'Wifi SSID',
   Restart = 'Restart',

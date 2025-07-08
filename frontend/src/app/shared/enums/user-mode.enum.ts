@@ -5,5 +5,5 @@ export enum UserMode {
 
 export const USER_MODE_MAP = {
   [UserMode.Standard]: 'Standard',
-  [UserMode.Pro]: 'Pro',
+  [UserMode.Pro]: 'Advanced',
 };

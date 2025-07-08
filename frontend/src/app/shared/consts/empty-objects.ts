@@ -28,8 +28,10 @@ const BLUETOOTH_CHARACTERISTIC: BluetoothCharacteristic = {
   dataType: BluetoothDataType.String,
   bluetoothAction: BluetoothAction.Read,
   value: '',
+  onlyPredefinedValuePossible: false,
   infos: [],
   readAfterEveryWrite: false,
+  sendBtnText: ''
 }
 
 

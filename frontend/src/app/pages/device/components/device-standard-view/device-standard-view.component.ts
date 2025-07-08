@@ -6,10 +6,11 @@ import { UcomConnectcharacteristicTitle } from 'src/app/shared/enums/ucom-connec
 import { DeviceCharacteristicComponent } from '../common/device-characteristic/device-characteristic.component';
 import { ScanResult } from '@capacitor-community/bluetooth-le';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faInfoCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum
     //material
     MatStepperModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
   ],
 })
 export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -34,13 +36,16 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
   protected readonly cloudURICharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.CloudURI);
   protected readonly wifiPasswordCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiPassword);
   protected readonly wifiSSIDCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiSSID);
-  protected readonly consoleCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.Console);
+  protected readonly statusCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.Status);
+  protected readonly reconnectCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.Reconnect);
+  protected readonly restartCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.Restart);
+
+  protected readonly infoIcon = faInfoCircle;
   protected readonly finishedIcon = faCheck;
   protected readonly notFinishedIcon = faXmark;
 
   //viewchildren
-  private stepper = viewChild<MatStepperModule>('stepper');
-  private consoleCharacteristicElem = viewChild<DeviceCharacteristicComponent>('consoleCharacteristicElem');
+  private statusCharacteristicElem = viewChild<DeviceCharacteristicComponent>('statusCharacteristicElem');
   private cloudURICharacteristicElem = viewChild<DeviceCharacteristicComponent>('cloudURICharacteristicElem');
 
   //data
@@ -51,7 +56,7 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.interval = setInterval(() => {
-      this.consoleCharacteristicElem()?.readCharacteristic();
+      this.statusCharacteristicElem()?.readCharacteristic();
     }, 2000);
   }
 
@@ -66,7 +71,7 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
 
   //events
   protected onConsoleReadValueUpdated(): void {
-    const value = this.consoleCharacteristicElem()?.getWriteValue();
+    const value = this.statusCharacteristicElem()?.getWriteValue();
     this.finished.set(value === 'S11'); //S11 is defined as finished
   }
 

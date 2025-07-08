@@ -7,7 +7,7 @@ export interface BluetoothCharacteristicInfo {
   valueKey?: string,// to map a received value to a info object 
 }
 export interface BluetoothCharacteristic {
-  id:string,
+  id: string,
   title: string,
   description: string,
   uuid: string,
@@ -16,6 +16,8 @@ export interface BluetoothCharacteristic {
   dataType: BluetoothDataType,
   bluetoothAction: BluetoothAction,
   value: any,
+  onlyPredefinedValuePossible: boolean,
   infos: BluetoothCharacteristicInfo[];
-  readAfterEveryWrite:boolean
+  readAfterEveryWrite: boolean,
+  sendBtnText: string;
 }
