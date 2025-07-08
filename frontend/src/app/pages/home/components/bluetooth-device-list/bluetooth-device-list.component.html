@@ -11,26 +11,28 @@
 
   @let isUcomConnectDevice=(result | isUcomConnectDevice);
 
-  <li class="result-item card-std">
-    <div class="device-data">
-      <h3>Device name: {{result.device.name}}</h3>
-      <p>Device Id: {{result.device.deviceId}}</p>
-      <p>Local Name: {{result.localName}}</p>
-      <ul>
-        @for(serviceDataPointKeyValue of (result.serviceData | keyvalue);track serviceDataPointKeyValue.key ){
-        <li>
-          <p>
-            {{serviceDataPointKeyValue.key}}: {{serviceDataPointKeyValue.value}}
-          </p>
-        </li>
-        }
-      </ul>
-    </div>
-    <div class="action-container">
-      <button mat-icon-button [disabled]="!isUcomConnectDevice" (click)="goToDevice(result,isUcomConnectDevice)">
-        <fa-icon [icon]="actionIcon"></fa-icon>
-      </button>
-    </div>
+  <li class="result-item card-std" (click)="goToDevice(result,isUcomConnectDevice)">
+    <button class="result-item-inner-container" (click)="goToDevice(result,isUcomConnectDevice)">
+      <div class="device-data">
+        <h3 class="text-left">Device name: {{result.device.name}}</h3>
+        <p class="text-left">Device Id: {{result.device.deviceId}}</p>
+        <p class="text-left">Local Name: {{result.localName}}</p>
+        <ul>
+          @for(serviceDataPointKeyValue of (result.serviceData | keyvalue);track serviceDataPointKeyValue.key ){
+          <li>
+            <p>
+              {{serviceDataPointKeyValue.key}}: {{serviceDataPointKeyValue.value}}
+            </p>
+          </li>
+          }
+        </ul>
+      </div>
+      <div class="action-container pl-4">
+        <h2 [ngClass]="isUcomConnectDevice?'icon clickable':'icon'">
+        <fa-icon  [icon]="actionIcon"></fa-icon>
+        </h2>
+      </div>
+    </button>
   </li>
   }
 </ul>

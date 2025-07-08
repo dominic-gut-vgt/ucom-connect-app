@@ -5,7 +5,8 @@
  .scan-results-list {
    margin-top: var(--space-2);
 
-   .result-item {
+   .result-item-inner-container {
+     width: 100%;
      display: flex;
      align-items: center;
      justify-content: space-between;
@@ -21,10 +22,10 @@
 
        .icon {
          height: 100%;
-         color: var(--color-primary);
+         color: var(--gray-500);
 
          &.clickable {
-           color: var(--gray-500);
+           color: var(--color-primary);
          }
        }
      }

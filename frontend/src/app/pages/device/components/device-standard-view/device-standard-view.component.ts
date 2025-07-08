@@ -33,6 +33,7 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
   scanResult = input.required<ScanResult | undefined>();
 
   //consts
+  protected readonly deviceIdCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.DeviceId);
   protected readonly cloudURICharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.CloudURI);
   protected readonly wifiPasswordCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiPassword);
   protected readonly wifiSSIDCharacteristic = UCOM_CONNECT_CHARACTERISTICS.find(c => c.title === UcomConnectcharacteristicTitle.WifiSSID);
@@ -47,12 +48,15 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
   //viewchildren
   private statusCharacteristicElem = viewChild<DeviceCharacteristicComponent>('statusCharacteristicElem');
   private cloudURICharacteristicElem = viewChild<DeviceCharacteristicComponent>('cloudURICharacteristicElem');
+  private reconnectCharacteristicElem = viewChild<DeviceCharacteristicComponent>('reconnectCharacteristicElem');
 
   //data
   private interval: any;
 
   //flags
   protected finished = signal(false);
+  private consoleReadCount = 0;
+
 
   ngOnInit(): void {
     this.interval = setInterval(() => {
@@ -73,6 +77,13 @@ export class DeviceStandardViewComponent implements OnInit, AfterViewInit, OnDes
   protected onConsoleReadValueUpdated(): void {
     const value = this.statusCharacteristicElem()?.getWriteValue();
     this.finished.set(value === 'S11'); //S11 is defined as finished
+    this.consoleReadCount++;
+    if (!this.finished()) {
+      if (this.consoleReadCount === 10) {
+        this.consoleReadCount = 0;
+        this.reconnectCharacteristicElem()?.writeCharacteristic();
+      }
+    }
   }
 
   ngOnDestroy(): void {

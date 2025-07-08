@@ -98,13 +98,13 @@ export class BluetoothService {
           let valueAsDataView: DataView;
           switch (bluetoothDatatype) {
             case BluetoothDataType.String128:
-              valueAsDataView = this.stringToFixedLengthDataView(value as string, 128)//hexStringToDataView(this.stringToHex(value as string));
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 128)
               break;
             case BluetoothDataType.String64:
-              valueAsDataView = this.stringToFixedLengthDataView(value as string, 64)//hexStringToDataView(this.stringToHex(value as string));
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 64)
               break;
             case BluetoothDataType.String32:
-              valueAsDataView = this.stringToFixedLengthDataView(value as string, 32)//hexStringToDataView(this.stringToHex(value as string));
+              valueAsDataView = this.stringToFixedLengthDataView(value as string, 32)
               break;
 
             case BluetoothDataType.Boolean:
@@ -144,13 +144,11 @@ export class BluetoothService {
     let bytes = encoder.encode(str);
 
     if (bytes.length > length) {
-      // Truncate if too long
-      bytes = bytes.slice(0, length);
+      bytes = bytes.slice(0, length); // Truncate if too long
     } else if (bytes.length < length) {
-      // Pad with null bytes if too short
       const padded = new Uint8Array(length);
       padded.set(bytes);
-      bytes = padded;
+      bytes = padded;  //Pad with null bytes if too short
     }
     return new DataView(bytes.buffer);
   }
@@ -160,7 +158,6 @@ export class BluetoothService {
       .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
       .join('');
   }
-
 
   async scan(): Promise<void> {
     if (!this.isScanning) {

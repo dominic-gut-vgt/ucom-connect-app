@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, input, model, output, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBook, faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faInfo, faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { BluetoothAction } from 'src/app/shared/enums/bluetooth-action.enum';
 import { BluetoothDataType } from 'src/app/shared/enums/bluetooth-data-type.enum';
@@ -50,6 +50,7 @@ export class DeviceCharacteristicComponent {
   protected readonly bluetoothDataType = BluetoothDataType;
   protected readonly readIcon = faBook;
   protected readonly infoIcon = faInfoCircle;
+  protected readonly characteristicInfosIcon = faInfo;
   protected readonly editIcon = faPen;
 
   //flags
@@ -121,7 +122,10 @@ export class DeviceCharacteristicComponent {
             default:
               console.warn('Unsupported data type for characteristic value update');
           }
+          console.log('++++++++Characteristic value read:', value);
+          if(value){
           this.readEvent.emit();
+          }
           this.updated.set(true);
           setTimeout(() => {
             this.updated.set(false);

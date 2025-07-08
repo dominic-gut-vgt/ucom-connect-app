@@ -2,6 +2,16 @@
 <div class="stepper-container rounded-lg overflow-hidden shadow-xl">
   <mat-stepper orientation="vertical" [linear]="false" #stepper>
     <mat-step>
+      <ng-template matStepLabel>Setup Device Id</ng-template>
+      <div class="my-5">
+        @if(deviceIdCharacteristic){
+        <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId" [characteristic]="deviceIdCharacteristic"
+          [isSelfCreated]="false" (readEvent)="stepper.next()">
+        </app-device-characteristic>
+        }
+      </div>
+    </mat-step>
+    <mat-step>
       <ng-template matStepLabel>Setup cloud URI</ng-template>
       <div class="my-5">
         @if(cloudURICharacteristic){
@@ -33,12 +43,21 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Connecting</ng-template>
+      @if(finished()){
+      <div class="flex items-center my-4">
+        <fa-icon [icon]="finishedIcon" size="2x" class="text-green-500 mr-3"></fa-icon>
+        <p class="!text-green-500">
+          Your device is now configured and ready to use.
+        </p>
+      </div>
+      }@else {
       <div class="flex items-center mb-3">
         <mat-spinner></mat-spinner>
         <p class="ps-4">
           Your device is currently attempting to establish a connection. Below you can see the current status
         </p>
       </div>
+      }
       @if(statusCharacteristic){
       <app-device-characteristic #statusCharacteristicElem [deviceId]="scanResult()?.device?.deviceId"
         [characteristic]="statusCharacteristic" [isSelfCreated]="false" (readEvent)="onConsoleReadValueUpdated()">
@@ -57,7 +76,7 @@
             </p>
             @if(reconnectCharacteristic){
             <div class="mb-5 pb-5">
-              <app-device-characteristic [deviceId]="scanResult()?.device?.deviceId"
+              <app-device-characteristic #reconnectCharacteristicElem [deviceId]="scanResult()?.device?.deviceId"
                 [characteristic]="reconnectCharacteristic" [isSelfCreated]="false">
               </app-device-characteristic>
             </div>
@@ -73,24 +92,6 @@
         </mat-accordion>
       </div>
 
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Finished</ng-template>
-      <div class="flex flex-col items-center my-5">
-        @if(finished()){
-        <fa-icon [icon]="finishedIcon" size="2x" class="mb-3"></fa-icon>
-        <p>
-          Your device is now configured and ready to use.
-        </p>
-        }@else {
-        <fa-icon [icon]="notFinishedIcon" size="2x" class="mb-3"></fa-icon>
-        <p>
-          Your device is not yet configured. Please make sure you have set the wifi SSID and password correctly.
-          Sometimes
-          establishing a connection can take a few minutes.
-        </p>
-        }
-      </div>
     </mat-step>
   </mat-stepper>
 </div>
