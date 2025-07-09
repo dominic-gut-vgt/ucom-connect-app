@@ -15,7 +15,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
-  imports: [CommonModule, FormsModule, FontAwesomeModule, MatFormField, MatLabel, MatSlideToggle]
+  imports: [CommonModule, FormsModule, FontAwesomeModule, MatLabel, MatSlideToggle]
 })
 export class SettingsPage {
 
