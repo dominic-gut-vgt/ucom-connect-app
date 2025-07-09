@@ -1,15 +1,14 @@
-import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { faCodeBranch, faSliders, faToggleOn } from '@fortawesome/free-solid-svg-icons';
+import { faCodeBranch, faSliders} from '@fortawesome/free-solid-svg-icons';
 import { APP_DATA } from 'src/app/shared/consts/app-data';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MatFormField, MatLabel } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
+import { MatLabel } from '@angular/material/input';
 import { USER_MODE_MAP, UserMode } from 'src/app/shared/enums/user-mode.enum';
 import { SettingsStore } from 'src/app/shared/stores/settings/settings-store';
 import { Settings } from 'src/app/shared/interfaces/settings.interface';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
