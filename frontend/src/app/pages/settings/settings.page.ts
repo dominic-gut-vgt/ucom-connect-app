@@ -1,4 +1,4 @@
-import { Component, effect, inject, linkedSignal } from '@angular/core';
+import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { faCodeBranch, faSliders, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import { APP_DATA } from 'src/app/shared/consts/app-data';
@@ -8,12 +8,14 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { USER_MODE_MAP, UserMode } from 'src/app/shared/enums/user-mode.enum';
 import { SettingsStore } from 'src/app/shared/stores/settings/settings-store';
 import { Settings } from 'src/app/shared/interfaces/settings.interface';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
-  imports: [CommonModule, FontAwesomeModule, MatFormField, MatLabel, MatSelect, MatOption]
+  imports: [CommonModule, FormsModule, FontAwesomeModule, MatFormField, MatLabel, MatSlideToggle]
 })
 export class SettingsPage {
 
@@ -23,18 +25,42 @@ export class SettingsPage {
   //consts
   protected readonly userModeMap = USER_MODE_MAP;
   protected readonly userModes = Object.keys(USER_MODE_MAP).map(key => key as UserMode);
-  protected readonly userModeEnum= UserMode;
-  
+  protected readonly userModeEnum = UserMode;
+
   //icons
   protected readonly versionIcon = faCodeBranch;
   protected readonly modeIcon = faSliders;
   protected readonly appVersion = APP_DATA.appVersion;
 
   //data
-  protected userMode = linkedSignal(() => this.settingsStore.settings.userMode());
+  protected userModeIsPro = signal(true);
 
-  onUserModeChange() {
-    const newSettings:Settings = { ...this.settingsStore.settings(), userMode: this.userMode() };
+  //flags
+  private inited = false;
+
+  constructor() {
+    effect(() => {
+      console.log(this.settingsStore.settings());
+      if (this.settingsStore.isLoaded()) {
+        if (!this.inited) {
+          this.init();
+        }
+      } else {
+        this.inited = false
+      }
+    });
+  }
+
+  private init(): void {
+    this.userModeIsPro.set(this.settingsStore.settings().userMode === UserMode.Pro);
+    
+    this.inited = true;
+  }
+
+
+  protected onUserModeChange(event: MatSlideToggleChange): void {
+    const userMode = event.checked ? UserMode.Pro : UserMode.Standard;
+    const newSettings: Settings = { ...this.settingsStore.settings(), userMode: userMode };
     this.settingsStore.saveSettings(newSettings);
   }
 }

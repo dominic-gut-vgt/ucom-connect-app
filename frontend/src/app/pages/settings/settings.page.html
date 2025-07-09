@@ -14,28 +14,21 @@
       <div class="card-std">
         <h2><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
 
-        @switch (userMode()) {
-        @case (userModeEnum.Standard) {
+        @if (userModeIsPro()) {
+        <p class="py-3">You are currently in advanced mode. Only use this with caution. Additionall functionality and
+          debugging features are available.
+        </p>
+        }@else {
         <p class="py-3">You are currently in standard mode. In this mode you can use the app to connect to your UCOM
           Connect devices.
         </p>
         }
-        @case (userModeEnum.Pro) {
-        <p class="py-3">You are currently in advanced mode. Only use this with caution. Additionall functionality and debugging features are available.
-        </p>
-        }
-        }
 
-        <mat-form-field class="w-full">
-          <mat-label>Select an app mode</mat-label>
-          <mat-select [(value)]="userMode" (valueChange)="onUserModeChange()">
-            @for(userMode of userModes;track userMode){
-            <mat-option [value]="userMode">
-              {{userModeMap[userMode]}}
-            </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <div class="w-full flex items-center justify-between">
+          <mat-label>Enable advanced mode</mat-label>
+          <mat-slide-toggle labelPosition="before" [(ngModel)]="userModeIsPro"
+            (change)="onUserModeChange($event)"></mat-slide-toggle>
+        </div>
       </div>
     </li>
   </ul>

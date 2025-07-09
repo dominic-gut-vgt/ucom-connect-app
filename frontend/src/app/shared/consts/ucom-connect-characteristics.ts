@@ -105,7 +105,7 @@ export const UCOM_CONNECT_CHARACTERISTICS: BluetoothCharacteristic[] = [
   {
     id: UcomConnectcharacteristicTitle.CloudURI,
     title: UcomConnectcharacteristicTitle.CloudURI,
-    description: 'Edit the wifi cloud URI',
+    description: 'Edit the cloud URI',
     uuid: '7a311524-82cd-11ec-a8a3-0242ac120002',
     serviceUUID: '0be217e9-d3a5-428f-a009-31fa6831b9c5',
     dataType: BluetoothDataType.String128,

@@ -7,14 +7,14 @@ import { LocalStorageKey } from '../../enums/local-storage-key.enum';
 
 type SettingsState = {
   settings: Settings;
-  isLoading: boolean;
+  isLoaded: boolean;
 };
 
 const initialState: SettingsState = {
   settings: {
     userMode: UserMode.Standard
   },
-  isLoading: false,
+  isLoaded: false,
 };
 
 export const SettingsStore = signalStore(
@@ -24,12 +24,12 @@ export const SettingsStore = signalStore(
 
     //load --------------------------------------------------------------------------------------------------
     async loadSettings(): Promise<void> {
-      patchState(store, { isLoading: true });
+      patchState(store, { isLoaded: false });
       const settings = await localStorageService.getItem<Settings>(LocalStorageKey.Settings);
       if (!settings) {
         await localStorageService.setItem<Settings>(LocalStorageKey.Settings, store.settings());
       } else {
-        patchState(store, { settings: settings, isLoading: false });
+        patchState(store, { settings: settings, isLoaded: true });
       }
     },
 
