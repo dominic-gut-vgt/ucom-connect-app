@@ -1,35 +1,37 @@
 <div class="page-container">
-  <ul class="w-full">
+  <div class="width-wrapper">
+    <ul class="w-full">
 
-    <li class="settings-item my-4 w-full">
-      <h1 class="pt-4">General infos</h1>
-      <div class="card-std mt-4">
-        <h2><fa-icon [icon]="versionIcon"></fa-icon> App Version</h2>
-        <p>Version {{appVersion}}</p>
-      </div>
-    </li>
-
-    <li class="settings-item my-4 py-4 w-full">
-      <h1 class="pt-4">Main Settings</h1>
-      <div class="card-std">
-        <h2><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
-
-        @if (userModeIsPro()) {
-        <p class="py-3">You are currently in advanced mode. Only use this with caution. Additionall functionality and
-          debugging features are available.
-        </p>
-        }@else {
-        <p class="py-3">You are currently in standard mode. In this mode you can use the app to connect to your UCOM
-          Connect devices.
-        </p>
-        }
-
-        <div class="w-full flex items-center justify-between">
-          <mat-label>Enable advanced mode</mat-label>
-          <mat-slide-toggle labelPosition="before" [(ngModel)]="userModeIsPro"
-            (change)="onUserModeChange($event)"></mat-slide-toggle>
+      <li class="settings-item my-4 w-full">
+        <h1 class="pt-4 title">General infos</h1>
+        <div class="card-std mt-4">
+          <h2 class="subtitle"><fa-icon [icon]="versionIcon"></fa-icon> App Version</h2>
+          <p>Version {{appVersion}}</p>
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+
+      <li class="settings-item my-4 py-4 w-full">
+        <h1 class="pt-4 title">Main Settings</h1>
+        <div class="card-std">
+          <h2 class="subtitle"><fa-icon [icon]="modeIcon"></fa-icon> App Mode</h2>
+
+          @if (userModeIsPro()) {
+          <p class="py-3">You are currently in advanced mode. Only use this with caution. Additionall functionality and
+            debugging features are available.
+          </p>
+          }@else {
+          <p class="py-3">You are currently in standard mode. In this mode you can use the app to connect to your UCOM
+            Connect devices.
+          </p>
+          }
+
+          <div class="w-full flex items-center justify-between">
+            <mat-label>Enable advanced mode</mat-label>
+            <mat-slide-toggle labelPosition="before" [(ngModel)]="userModeIsPro"
+              (change)="onUserModeChange($event)"></mat-slide-toggle>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
